@@ -1,0 +1,18 @@
+{
+  "name": "mcp-monorepo",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Model Context Protocol (MCP) Monorepo",
+  "scripts": {
+    "build": "pnpm -r build",
+    "ai-sdk": "pnpm --filter ./examples/ai-sdk run start",
+    "openai-sdk": "pnpm --filter ./examples/openai-sdk run start"
+  },
+  "keywords": [
+    "mcp",
+    "ai",
+    "monorepo"
+  ],
+  "author": "",
+  "license": "MIT"
+} 

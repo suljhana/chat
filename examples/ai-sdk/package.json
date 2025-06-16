@@ -1,18 +1,14 @@
 {
-  "name": "mcp-ai-sdk-examples",
   "version": "1.0.0",
-  "description": "Examples using AI SDK with Model Context Protocol (MCP)",
+  "description": "AI SDK example using Model Context Protocol (MCP)",
   "type": "module",
   "scripts": {
-    "ai-sdk": "node ai-sdk",
-    "build": "tsc",
-    "dev": "tsx ai-sdk",
-    "example:ai-sdk": "tsx ai-sdk.ts",
-    "example:web-sdk": "tsx web-sdk.ts"
+    "start": "tsx index.ts"
   },
   "dependencies": {
     "ai": "^4.3.16",
     "@ai-sdk/openai": "^1.0.0",
+    "@pipedream/shared": "workspace:*",
     "commander": "^12.0.0",
     "dotenv": "^16.4.5",
     "zod": "^3.23.0",
@@ -21,19 +17,14 @@
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
-    "tsx": "^4.0.0",
     "typescript": "^5.0.0"
-  },
-  "bin": {
-    "ai-sdk": "./ai-sdk"
   },
   "keywords": [
     "ai",
     "mcp",
-    "cli",
-    "tools",
-    "openai"
+    "examples",
+    "ai-sdk"
   ],
-  "author": "",
+  "author": "Pipedream",
   "license": "MIT"
 } 
