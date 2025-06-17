@@ -1,22 +1,15 @@
 import { openai } from "@ai-sdk/openai";
+import { config as pdConfig, pdHeaders } from "@pipedream/shared/pd.js";
 import { CoreMessage, experimental_createMCPClient, generateText } from "ai";
 import { Command } from "commander";
-import { z } from "zod";
-import { loadAndValidateConfig } from "../shared/config.js";
-
-loadAndValidateConfig(
-  import.meta.url,
-  z.object({
-    OPENAI_API_KEY: z.string(),
-  })
-);
+import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp";
 
 const program = new Command();
 
 interface ProgramOptions {
   model: string;
   maxSteps: number;
-  mcpUrl: string;
+  external_user_id: string;
 }
 
 program
@@ -24,7 +17,10 @@ program
   .description("AI SDK CLI tool with MCP integration")
   .version("1.0.0")
   .argument("<instruction>", "The instruction to process")
-  .requiredOption("-u, --mcp-url <url>", "MCP server URL (required)")
+  .requiredOption(
+    "-u, --external_user_id <extuid>",
+    "External user ID (required)"
+  )
   .option("-m, --model <model>", "OpenAI model to use", "gpt-4-1106-preview")
   .option("-s, --max-steps <steps>", "Maximum conversation steps", "10")
   .action(async (instruction: string, options: ProgramOptions) => {
@@ -41,15 +37,24 @@ program
     try {
       console.log("🤖 Initializing AI SDK with MCP client...");
 
-      mcpClient = await experimental_createMCPClient({
-        transport: {
-          type: "sse",
-          url: options.mcpUrl,
+      const headers = pdHeaders(options.external_user_id);
+
+      console.log("🔑 Headers:", headers);
+      console.log("🔑 MCP Host:", pdConfig.MCP_HOST);
+
+      const transport = new StreamableHTTPClientTransport(new URL(pdConfig.MCP_HOST + `/v1/${options.external_user_id}`), {
+        requestInit: {
           headers: {
-            "Content-Type": "application/json",
-          },
-        },
+            ...headers,
+            "x-pd-tool-mode": "dynamic",
+          }
+        }
       });
+
+      mcpClient = await experimental_createMCPClient({
+        transport
+      });
+
 
       console.log("✅ MCP client initialized");
 
@@ -77,7 +82,7 @@ If you encounter any errors or need clarification, explain what happened and sug
       console.log(`📋 Configuration:
 - Model: ${options.model}
 - Max Steps: ${maxSteps}
-- MCP URL: ${options.mcpUrl}
+- MCP URL: ${pdConfig.MCP_HOST}
 `);
       console.log("📝 Starting conversation loop...\n");
 
@@ -161,6 +166,7 @@ If you encounter any errors or need clarification, explain what happened and sug
 
       console.log("\n🎉 Session complete!");
     } catch (error) {
+      console.log("Error", error);
       console.error("💥 Error occurred:", error);
       process.exit(1);
     } finally {
