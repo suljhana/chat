@@ -2,31 +2,45 @@
 
 This repository contains examples of using Pipedream's MCP server.
 
-
 ### Installation
 
-Install all dependencies:
+Install dependencies:
 
 ```bash
 pnpm install
 ```
 
-### Environment Setup
+### Prerequisites
 
-Before running the examples, you need to set up your environment variables:
+To set up your environment, you'll need:
 
-1. Copy the example environment file:
-   ```bash
-   cp .env.example .env
-   ```
+1. A [Pipedream account](https://pipedream.com/auth/signup)
+2. A [Pipedream project](/projects/#creating-projects). Accounts connected via MCP will be stored here.
+3. [Pipedream OAuth credentials](/rest-api/auth/#oauth)
+4. An [OpenAI API key](https://platform.openai.com/api-keys)
 
-2. Get your Pipedream client ID and secret from the [Pipedream dashboard](https://pipedream.com/settings/api).
+### Set up your environment
+
+Copy the example environment file and add your credentials:
+
+```bash
+cp .env.example .env
+```
+
+Learn more about [environments in Pipedream Connect](/connect/managed-auth/environments).
 
 ### Running Examples
 
 You can run the examples using the following commands from the root directory:
 
-#### AI SDK Example
+#### Vercel AI SDK Example
+
 ```bash
-pnpm ai-sdk
+pnpm ai-sdk -u <external-user-id> "<prompt>"
+```
+
+For example,
+
+```bash
+pnpm ai-sdk -u abc-123 "Send a funny joke to the #random channel in Slack"
 ```
