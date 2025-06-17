@@ -26,8 +26,13 @@ export const pd = createBackendClient({
   environment: config.PIPEDREAM_PROJECT_ENVIRONMENT,
 });
 
-export const pdHeaders = (exuid: string) => ({
-  "x-pd-project-id": config.PIPEDREAM_PROJECT_ID,
-  "x-pd-environment": config.PIPEDREAM_PROJECT_ENVIRONMENT,
-  "x-pd-external-user-id": exuid,
-});
+export const pdHeaders = async (exuid: string) => {
+  const accessToken = await pd.rawAccessToken();
+
+  return {
+    Authorization: `Bearer ${accessToken}`,
+    "x-pd-project-id": config.PIPEDREAM_PROJECT_ID,
+    "x-pd-environment": config.PIPEDREAM_PROJECT_ENVIRONMENT,
+    "x-pd-external-user-id": exuid,
+  };
+};

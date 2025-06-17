@@ -37,24 +37,20 @@ program
     try {
       console.log("🤖 Initializing AI SDK with MCP client...");
 
-      const headers = pdHeaders(options.external_user_id);
+      const headers = await pdHeaders(options.external_user_id);
+      const mcpUrl = new URL(
+        pdConfig.MCP_HOST + `/v1/${options.external_user_id}`
+      );
 
-      console.log("🔑 Headers:", headers);
-      console.log("🔑 MCP Host:", pdConfig.MCP_HOST);
-
-      const transport = new StreamableHTTPClientTransport(new URL(pdConfig.MCP_HOST + `/v1/${options.external_user_id}`), {
+      const transport = new StreamableHTTPClientTransport(mcpUrl, {
         requestInit: {
-          headers: {
-            ...headers,
-            "x-pd-tool-mode": "dynamic",
-          }
-        }
+          headers,
+        },
       });
 
       mcpClient = await experimental_createMCPClient({
-        transport
+        transport,
       });
-
 
       console.log("✅ MCP client initialized");
 
