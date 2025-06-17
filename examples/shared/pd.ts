@@ -13,7 +13,7 @@ export const config = loadAndValidateConfig(
       .enum(["development", "production"])
       .default("development"),
 
-    MCP_HOST: z.string().default("https://remote.pipedream.net"),
+    MCP_HOST: z.string().default("https://remote.mcp.pipedream.net"),
   })
 );
 
