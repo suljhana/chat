@@ -2,13 +2,13 @@
 
 This repository contains examples of using Pipedream's dynamic MCP server.
 
-## What Makes Pipedream's MCP Server Unique
+## What makes Pipedream's MCP server unique
 
-Unlike traditional MCP implementations that provide a fixed set of tools, Pipedream's MCP server offers dynamic tools. This means that the tools are not pre-defined, but are discovered and configured on-demand.
+Unlike traditional MCP implementations that only provide a fixed set of tools, Pipedream's MCP server offers the ability to identify and load tools dynamically. This means that the tools can either be pre-defined, or discovered and configured on-demand.
 
-This is something that the spec defines, but the clients don't support it yet.
+This type of [tool discovery](https://modelcontextprotocol.io/docs/concepts/tools#tool-discovery-and-updates) is defined in the MCP spec, but most MCP clients don't support yet provide support for it.
 
-This repo contains examples of how you, as the developer of an MCP client, can use Pipedream's MCP server.
+This repo contains examples of how you, as the developer of an MCP client, can use Pipedream's app-level **or dynamic** MCP server.
 
 ## High level
 
@@ -16,10 +16,10 @@ The idea is to manually reload the list of tools on each turn.
 
 ## Examples
 
-This repository includes two examples showing different approaches to integrating with Pipedream's dynamic MCP server:
+This repo includes two examples showing different approaches to integrating with Pipedream's dynamic MCP server:
 
-- **[AI SDK Example](examples/ai-sdk/)** - Uses Vercel's AI SDK with automatic tool handling
-- **[OpenAI SDK Example](examples/openai-sdk/)** - Uses OpenAI SDK directly with manual tool conversion for full control
+- The **[AI SDK Example](examples/ai-sdk/)** uses Vercel's AI SDK with automatic tool handling
+- The **[OpenAI SDK Example](examples/openai-sdk/)** uses OpenAI SDK directly with manual tool conversion for full control
 
 ### Installation
 
@@ -34,8 +34,8 @@ pnpm install
 To set up your environment, you'll need:
 
 1. A [Pipedream account](https://pipedream.com/auth/signup)
-2. A [Pipedream project](/projects/#creating-projects). Accounts connected via MCP will be stored here.
-3. [Pipedream OAuth credentials](/rest-api/auth/#oauth)
+2. A [Pipedream project](https://pipedream.com/docs/projects/#creating-projects). Accounts connected via MCP will be stored here.
+3. [Pipedream OAuth credentials](https://pipedream.com/docs/rest-api/auth/#oauth)
 4. An [OpenAI API key](https://platform.openai.com/api-keys)
 
 ### Set up your environment
@@ -46,7 +46,7 @@ Copy the example environment file and add your credentials:
 cp .env.example .env
 ```
 
-Learn more about [environments in Pipedream Connect](/connect/managed-auth/environments).
+Learn more about [environments in Pipedream Connect](https://pipedream.com/docs/connect/managed-auth/environments).
 
 ### Running Examples
 
