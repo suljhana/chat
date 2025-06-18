@@ -41,13 +41,13 @@ program.action(async (instruction: string, options: ProgramOptions) => {
 
     const transport = await createMCPTransport(config.options.external_user_id);
 
+    // Initialize the  MCP client from AI SDK
     mcpClient = await experimental_createMCPClient({
       transport,
     });
 
     console.log("✅ MCP client initialized");
 
-    // Initial system message
     const messages: CoreMessage[] = [
       {
         role: "system",
@@ -62,16 +62,22 @@ program.action(async (instruction: string, options: ProgramOptions) => {
     let ended = false;
     let steps = 0;
 
+    // Main conversation loop - continues until AI decides to stop or max steps reached
     while (!ended && steps < config.maxSteps) {
       logStep(steps + 1, config.maxSteps);
 
-      // Get tools from MCP client before each step
+      // Reload tools from MCP client before each generation step
+      // This ensures we have the latest available tools (servers can add/remove tools dynamically)
       logToolsLoading();
       const tools = await mcpClient.tools();
       const toolNames = Object.keys(tools).join(", ");
       logAvailableTools(toolNames);
 
       logAIResponse();
+      
+      // Generate response with AI SDK - key configuration:
+      // - tools: Makes MCP tools available to the model
+      // - maxSteps: 1 ensures we handle one step at a time for better control
       const response = await generateText({
         model: openai(config.options.model as any),
         messages,
@@ -81,19 +87,24 @@ program.action(async (instruction: string, options: ProgramOptions) => {
 
       logResponse(response.text);
 
+      // Handle different completion reasons - this determines conversation flow
       switch (response.finishReason) {
         case "stop":
         case "content-filter":
+          // Model completed its response naturally or was filtered
           ended = true;
           logConversationComplete();
           break;
 
         case "error":
+          // An error occurred during generation
           ended = true;
           console.error("❌ An error occurred during generation");
           break;
 
         case "tool-calls":
+          // Model wants to use tools
+          // AI SDK automatically executes the tools and provides results
           logToolCalls();
           response.toolCalls.forEach((toolCall, index) => {
             console.log(`  ${index + 1}. ${toolCall.toolName}`);
@@ -107,6 +118,7 @@ program.action(async (instruction: string, options: ProgramOptions) => {
             console.log(`  ${index + 1}. ${JSON.stringify(result, null, 2)}`);
           });
 
+          // Add the tool calls and results to conversation history
           messages.push(
             {
               role: "assistant",

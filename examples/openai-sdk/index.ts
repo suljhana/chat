@@ -25,8 +25,10 @@ import {
   ProgramOptions,
 } from "@pipedream/shared/cli.js";
 
+// Load environment variables (especially OPENAI_API_KEY)
 dotenv.config();
 
+// Create CLI program with commander.js for handling command-line arguments
 const program = createBaseProgram(
   "openai-sdk",
   "OpenAI SDK CLI tool with MCP integration"
@@ -35,6 +37,7 @@ const program = createBaseProgram(
 program.action(async (instruction: string, options: ProgramOptions) => {
   const config = validateAndParseOptions(instruction, options);
 
+  // Initialize OpenAI client with API key from environment
   const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
   });
@@ -46,6 +49,7 @@ program.action(async (instruction: string, options: ProgramOptions) => {
 
     const transport = await createMCPTransport(config.options.external_user_id);
 
+    // Initialize the MCP client using the official MCP SDK
     mcpClient = new Client({
       name: "pd-example-client",
       version: "1.0.0",
@@ -55,7 +59,7 @@ program.action(async (instruction: string, options: ProgramOptions) => {
 
     console.log("✅ MCP client initialized");
 
-    // Initial messages
+    // Set up the conversation with initial system prompt and user instruction
     const messages: OpenAI.Chat.Completions.ChatCompletionMessageParam[] = [
       {
         role: "system",
@@ -70,17 +74,19 @@ program.action(async (instruction: string, options: ProgramOptions) => {
     let ended = false;
     let steps = 0;
 
+    // Main conversation loop - continues until AI decides to stop or max steps reached
     while (!ended && steps < config.maxSteps) {
       logStep(steps + 1, config.maxSteps);
 
-      // Get tools from MCP client before each step
+      // Reload tools from MCP client before each generation step
+      // This ensures we have the latest available tools
       logToolsLoading();
       const toolsResponse = await mcpClient.listTools();
       const mcpTools = toolsResponse.tools || [];
       const toolNames = mcpTools.map((tool) => tool.name).join(", ");
       logAvailableTools(toolNames);
 
-      // Convert MCP tools to OpenAI tools format
+      // Convert MCP tools to OpenAI's function calling format
       const openaiTools: OpenAI.Chat.Completions.ChatCompletionTool[] =
         mcpTools.map((tool: any) => ({
           type: "function",
@@ -93,11 +99,11 @@ program.action(async (instruction: string, options: ProgramOptions) => {
 
       logAIResponse();
 
+      // Generate response with OpenAI SDK
       const response = await openai.chat.completions.create({
         model: config.options.model as any,
         messages: messages,
         tools: openaiTools.length > 0 ? openaiTools : undefined,
-        tool_choice: openaiTools.length > 0 ? "auto" : undefined,
       });
 
       const choice = response.choices[0];
@@ -105,17 +111,21 @@ program.action(async (instruction: string, options: ProgramOptions) => {
 
       logResponse(assistantMessage.content || "(no text content)");
 
-      // Add assistant message to conversation
+      // Add assistant message to conversation history
+      // This preserves the conversation context for subsequent turns
       messages.push(assistantMessage);
 
+      // Handle different completion reasons - this determines conversation flow
       switch (choice.finish_reason) {
         case "stop":
         case "content_filter":
+          // Model completed its response naturally or was filtered
           ended = true;
           logConversationComplete();
           break;
 
         case "tool_calls":
+          // Model wants to use tools - we need to manually execute them
           if (assistantMessage.tool_calls) {
             logToolCalls();
             assistantMessage.tool_calls.forEach((toolCall, index) => {
@@ -124,20 +134,23 @@ program.action(async (instruction: string, options: ProgramOptions) => {
             });
 
             logExecutingTools();
+            
+            // Collect tool results to add back to the conversation
             const toolResults: OpenAI.Chat.Completions.ChatCompletionMessageParam[] =
               [];
 
+            // Execute each tool call sequentially via MCP client
             for (const toolCall of assistantMessage.tool_calls) {
               try {
                 const toolName = toolCall.function.name;
                 const toolArgs = JSON.parse(toolCall.function.arguments);
 
-                // Execute the tool via MCP client using callTool
                 const result = await mcpClient.callTool({
                   name: toolName,
                   arguments: toolArgs,
                 });
 
+                // Format the result for OpenAI's expected tool message format
                 toolResults.push({
                   role: "tool",
                   tool_call_id: toolCall.id,
@@ -148,6 +161,8 @@ program.action(async (instruction: string, options: ProgramOptions) => {
                   `  ✅ ${toolName}: ${JSON.stringify(result, null, 2)}`
                 );
               } catch (error) {
+                // Handle tool execution errors gracefully
+                // We still need to provide a tool result message to maintain conversation flow
                 console.error(
                   `  ❌ Error executing ${toolCall.function.name}:`,
                   error
@@ -162,7 +177,7 @@ program.action(async (instruction: string, options: ProgramOptions) => {
               }
             }
 
-            // Add tool results to conversation
+            // Add tool results to conversation so the model can see what happened
             messages.push(...toolResults);
           }
           break;
