@@ -6,6 +6,8 @@ export const isTestEnvironment = Boolean(
     process.env.CI_PLAYWRIGHT,
 );
 
+export const isAuthRequired = process.env.REQUIRE_AUTH !== 'false';
+
 // Base metadata used throughout the application
 export const BASE_SITE_URL = 'https://chat.pipedream.com';
 export const BASE_TITLE = 'Pipedream Chat';

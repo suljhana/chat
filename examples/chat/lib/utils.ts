@@ -53,6 +53,24 @@ export function generateUUID(): string {
   });
 }
 
+// Global guest user ID for dev mode - consistent across all requests
+const GUEST_USER_ID = `guest-${generateUUID()}`;
+
+export function getGuestUserId(): string {
+  return GUEST_USER_ID;
+}
+
+export function createGuestSession() {
+  return {
+    user: {
+      id: getGuestUserId(),
+      name: 'Guest User',
+      email: 'guest@example.com'
+    }
+  };
+}
+
+
 function addToolMessageToChat({
   toolMessage,
   messages,
