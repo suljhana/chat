@@ -48,7 +48,7 @@ export const ToolCallResult = ({
         onSuccess: ({ id: accountId }) => {
           append({
             role: "user",
-            content: "done",
+            content: "Done",
           });
         }
       })
