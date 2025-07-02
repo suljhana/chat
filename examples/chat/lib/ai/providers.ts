@@ -22,9 +22,9 @@ export const myProvider = isTestEnvironment
   : customProvider({
       languageModels: {
         "gpt-4o-mini": openai("gpt-4o-mini"),
-        "gpt-4o": openai("gpt-4o"),
-        "claude-3.5-sonnet": anthropic("claude-3-5-sonnet-latest"),
-        "claude-3.7-sonnet": anthropic("claude-3-7-sonnet-latest"),
+        "gpt-4.1": openai("gpt-4.1-2025-04-14"),
+        "claude-4.0-opus": anthropic("claude-opus-4-20250514"),
+        "claude-sonnet-4": anthropic("claude-sonnet-4-20250514"),
         // 'chat-model-reasoning': wrapLanguageModel({
         //   model: fireworks('accounts/fireworks/models/deepseek-r1'),
         //   middleware: extractReasoningMiddleware({ tagName: 'think' }),
