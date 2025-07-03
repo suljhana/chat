@@ -11,7 +11,7 @@ export const isAuthRequired = process.env.REQUIRE_AUTH !== 'false';
 // Base metadata used throughout the application
 export const BASE_SITE_URL = 'https://chat.pipedream.com';
 export const BASE_TITLE = 'Pipedream Chat';
-export const BASE_DESCRIPTION = 'Use Pipedream Chat to talk directly with 2500+ APIs and supercharge your productivity';
+export const BASE_DESCRIPTION = 'Use Pipedream Chat to talk directly with 2700+ APIs and supercharge your productivity';
 
 export const BASE_METADATA = {
   metadataBase: new URL(BASE_SITE_URL),

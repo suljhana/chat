@@ -102,10 +102,10 @@ export function Chat({
                   <p 
                     className="text-muted-foreground max-w-sm mx-auto"
                   >
-                    Chat directly with 2500+ APIs powered by {" "}
+                    Chat directly with 2700+ APIs powered by {" "}
                     <Link
                       className="font-medium underline underline-offset-4"
-                      href="https://pipedream.com/docs/connect/mcp"
+                      href="https://pipedream.com/docs/connect/mcp/developers"
                       target="_blank"
                     >
                       Pipedream Connect
