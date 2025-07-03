@@ -1,4 +1,12 @@
+import { config } from 'dotenv';
+import 'dotenv/config'
 import type { NextConfig } from "next"
+
+const envFilePath = process.env.ENV_FILE_PATH
+
+if (envFilePath) {
+  config({ path: envFilePath });
+}
 
 const nextConfig: NextConfig = {
   experimental: {
