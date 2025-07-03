@@ -53,11 +53,9 @@ export function generateUUID(): string {
   });
 }
 
-// Global guest user ID for dev mode - consistent across all requests
-const GUEST_USER_ID = `guest-${generateUUID()}`;
-
 export function getGuestUserId(): string {
-  return GUEST_USER_ID;
+  // Use EXTERNAL_USER_ID from env (for development)
+  return process.env.EXTERNAL_USER_ID || 'local-dev-user';
 }
 
 export function createGuestSession() {

@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation"
 import { useWindowSize } from "usehooks-ts"
-import { useSession } from "next-auth/react"
+import { useEffectiveSession } from '@/hooks/use-effective-session'
 
 import { ModelSelector } from "@/components/model-selector"
 import { SidebarToggle } from "@/components/sidebar-toggle"
@@ -26,7 +26,7 @@ function PureChatHeader({
 }) {
   const router = useRouter()
   const { open } = useSidebar()
-  const { data: session } = useSession()
+  const { data: session } = useEffectiveSession()
   const isSignedIn = !!session?.user
 
   const { width: windowWidth } = useWindowSize()

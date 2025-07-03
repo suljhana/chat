@@ -8,6 +8,7 @@ import { Button } from './ui/button';
 import { createFrontendClient } from "@pipedream/sdk/browser"
 import { prettifyToolName } from "@/lib/utils";
 import { UseChatHelpers } from '@ai-sdk/react';
+import { useEffectiveSession } from '@/hooks/use-effective-session';
 
 type ConnectParams = {
   token: string | undefined;
@@ -40,11 +41,13 @@ export const ToolCallResult = ({
     connectParams.app = params?.get('app')
   }
 
-  const pd = createFrontendClient()
+  const { data: session } = useEffectiveSession();
+  const pd = createFrontendClient();
   const connectAccount = () => {
-    if (connectParams.app && connectParams.token) {
+    if (connectParams.app && connectParams.token && session?.user?.id) {
       pd.connectAccount({
         ...connectParams,
+        externalUserId: session.user.id,
         onSuccess: ({ id: accountId }) => {
           append({
             role: "user",
