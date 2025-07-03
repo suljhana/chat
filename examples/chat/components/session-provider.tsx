@@ -4,7 +4,7 @@ import { SessionProvider as NextAuthSessionProvider } from 'next-auth/react';
 import { createContext, useContext } from 'react';
 
 type AuthContextType = {
-  isAuthRequired: boolean;
+  isAuthDisabled: boolean;
   guestSession?: {
     user: {
       id: string;
@@ -14,15 +14,15 @@ type AuthContextType = {
   };
 };
 
-const AuthContext = createContext<AuthContextType>({ isAuthRequired: true });
+const AuthContext = createContext<AuthContextType>({ isAuthDisabled: false });
 
 export function SessionProvider({ 
   children, 
-  isAuthRequired, 
+  isAuthDisabled, 
   guestSession 
 }: { 
   children: React.ReactNode;
-  isAuthRequired: boolean;
+  isAuthDisabled: boolean;
   guestSession?: {
     user: {
       id: string;
@@ -32,14 +32,14 @@ export function SessionProvider({
   };
 }) {
   // For NextAuth, we need to provide a full session object with expires
-  const session = isAuthRequired ? undefined : (guestSession ? {
+  const session = isAuthDisabled ? (guestSession ? {
     ...guestSession,
     expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString() // 24 hours from now
-  } : undefined);
+  } : undefined) : undefined;
   
   
   return (
-    <AuthContext.Provider value={{ isAuthRequired, guestSession }}>
+    <AuthContext.Provider value={{ isAuthDisabled, guestSession }}>
       <NextAuthSessionProvider session={session}>
         {children}
       </NextAuthSessionProvider>

@@ -9,7 +9,7 @@ import { DataStreamHandler } from '@/components/data-stream-handler';
 import { DEFAULT_CHAT_MODEL } from '@/lib/ai/models';
 import { DBMessage } from '@/lib/db/schema';
 import { Attachment, UIMessage } from 'ai';
-import { BASE_METADATA, BASE_TITLE, isAuthRequired } from '@/lib/constants';
+import { BASE_METADATA, BASE_TITLE, isAuthDisabled } from '@/lib/constants';
 import { getEffectiveSession, shouldPersistData } from '@/lib/auth-utils';
 
 export async function generateMetadata(

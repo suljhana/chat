@@ -5,10 +5,10 @@ import { useAuthContext } from '@/components/session-provider';
 
 export function useEffectiveSession() {
   const { data: session, status } = useSession();
-  const { isAuthRequired, guestSession } = useAuthContext();
+  const { isAuthDisabled, guestSession } = useAuthContext();
 
-  // If auth is not required, always return the guest session
-  if (!isAuthRequired && guestSession) {
+  // If auth is disabled, always return the guest session
+  if (isAuthDisabled && guestSession) {
     return {
       data: {
         ...guestSession,

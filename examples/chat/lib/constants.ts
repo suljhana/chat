@@ -6,7 +6,9 @@ export const isTestEnvironment = Boolean(
     process.env.CI_PLAYWRIGHT,
 );
 
-export const isAuthRequired = process.env.REQUIRE_AUTH !== 'false';
+// Auth is disabled when DISABLE_AUTH is explicitly set to 'true'
+// This flag should only be used in development environments
+export const isAuthDisabled = process.env.DISABLE_AUTH === 'true';
 
 // Base metadata used throughout the application
 export const BASE_SITE_URL = 'https://chat.pipedream.com';

@@ -6,7 +6,7 @@ import { auth } from '../(auth)/auth';
 import Script from 'next/script';
 import { SessionProvider } from '@/components/session-provider';
 import { SignedOutHeader } from '@/components/signed-out-header';
-import { isAuthRequired } from '@/lib/constants';
+import { isAuthDisabled } from '@/lib/constants';
 import { createGuestSession } from '@/lib/utils';
 
 export const experimental_ppr = true;
@@ -20,7 +20,7 @@ export default async function Layout({
   const isCollapsed = cookieStore.get('sidebar:state')?.value !== 'true';
   
   // Use effective session (real or guest based on auth requirement)
-  const session = isAuthRequired ? rawSession : createGuestSession();
+  const session = isAuthDisabled ? createGuestSession() : rawSession;
   const isSignedIn = !!session?.user;
 
   return (
@@ -30,8 +30,8 @@ export default async function Layout({
         strategy="beforeInteractive"
       />
       <SessionProvider 
-        isAuthRequired={isAuthRequired} 
-        guestSession={!isAuthRequired ? session : undefined}
+        isAuthDisabled={isAuthDisabled} 
+        guestSession={isAuthDisabled ? session : undefined}
       >
         <SidebarProvider defaultOpen={!isCollapsed}>
           {isSignedIn ? (

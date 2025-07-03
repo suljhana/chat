@@ -1,7 +1,7 @@
 import { auth } from "@/app/(auth)/auth"
 import { systemPrompt } from "@/lib/ai/prompts"
 import { myProvider } from "@/lib/ai/providers"
-import { isProductionEnvironment, isAuthRequired } from "@/lib/constants"
+import { isProductionEnvironment, isAuthDisabled } from "@/lib/constants"
 import {
   deleteChatById,
   getChatById,
