@@ -1,7 +1,7 @@
 import 'server-only';
 
 import { auth } from '@/app/(auth)/auth';
-import { isAuthDisabled } from '@/lib/constants';
+import { isAuthDisabled, isPersistenceDisabled } from '@/lib/constants';
 import { createGuestSession } from '@/lib/utils';
 
 // Shared helper for API routes to get effective session
@@ -16,7 +16,7 @@ export async function getEffectiveSession() {
   }
 }
 
-// Helper to check if we should persist data
+// Helper to check if we should persist data to database
 export function shouldPersistData() {
-  return !isAuthDisabled;
+  return !isPersistenceDisabled;
 }

@@ -10,6 +10,10 @@ export const isTestEnvironment = Boolean(
 // This flag should only be used in development environments
 export const isAuthDisabled = process.env.DISABLE_AUTH === 'true';
 
+// Database persistence is disabled when DISABLE_PERSISTENCE is explicitly set to 'true'
+// This allows testing without setting up Supabase/PostgreSQL database
+export const isPersistenceDisabled = process.env.DISABLE_PERSISTENCE === 'true';
+
 // Base metadata used throughout the application
 export const BASE_SITE_URL = 'https://chat.pipedream.com';
 export const BASE_TITLE = 'Pipedream Chat';
