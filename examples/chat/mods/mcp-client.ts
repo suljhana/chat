@@ -125,7 +125,7 @@ class MCPSessionManager {
   private chatId: string
   private userId: string
 
-  constructor(mcpBaseUrl: string, userId: string, chatId: string, sessionId: string) {
+  constructor(mcpBaseUrl: string, userId: string, chatId: string, sessionId: string | undefined) {
     console.log(`Using ${mcpBaseUrl} as the MCP Server.`)
     this.serverUrl = `${mcpBaseUrl}/v1/${userId}`
     this.sessionId = sessionId
@@ -151,17 +151,23 @@ class MCPSessionManager {
           console.warn('Failed to get Pipedream headers, proceeding without them:', error)
         }
         // Create MCP client using the SDK
+        const transportOptions: any = {
+          requestInit: {
+            headers: {
+              "x-pd-mcp-chat-id": this.chatId,
+              ...headers,
+            }
+          } as RequestInit,
+        }
+        
+        // Only include sessionId if it's defined
+        if (this.sessionId) {
+          transportOptions.sessionId = this.sessionId
+        }
+        
         const transport = new StreamableHTTPClientTransport(
           new URL(this.serverUrl),
-          {
-            sessionId: this.sessionId,
-            requestInit: {
-              headers: {
-                "x-pd-mcp-chat-id": this.chatId,
-                ...headers,
-              }
-            } as RequestInit,
-          }
+          transportOptions
         );
 
         this.client = new MCPClient(
