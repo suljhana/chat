@@ -90,7 +90,7 @@ function PureChatHeader({
       </div>
 
       {/* Absolutely positioned banner to align with main content */}
-      <div className="absolute inset-x-0 top-0 h-full flex items-center justify-center pointer-events-none">
+      <div className="absolute inset-x-0 top-1.5 h-full flex items-start justify-center pointer-events-none">
         <div className="w-full max-w-3xl px-4">
           <div className="flex justify-center">
             <InfoBanner 

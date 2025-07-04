@@ -23,8 +23,8 @@ export function InfoBanner({ isAuthDisabled: isAuthDisabledMode, className = "" 
   return (
     <div className={`flex items-start gap-2 sm:gap-3 p-2 sm:px-3 rounded-md border text-xs sm:text-sm font-medium ${
       isAuthDisabledMode 
-        ? 'bg-amber-50 border-amber-200 text-amber-800 dark:bg-amber-950/20 dark:border-amber-800 dark:text-amber-200' 
-        : 'bg-blue-50 border-blue-200 text-blue-800 dark:bg-blue-950/20 dark:border-blue-800 dark:text-blue-200'
+        ? 'bg-amber-50 border-amber-200 text-amber-800 dark:bg-amber-950 dark:border-amber-800 dark:text-amber-200' 
+        : 'bg-blue-50 border-blue-200 text-blue-800 dark:bg-blue-950 dark:border-blue-800 dark:text-blue-200'
     } ${className}`}>
       <Info className={`size-4 shrink-0 mt-px ${
         isAuthDisabledMode 
