@@ -107,15 +107,30 @@ export async function POST(request: Request) {
     }
 
     // get any existing mcp sessions from the mcp server
-    const mcpSessionsResp = await fetch(`${MCP_BASE_URL}/v1/${userId}/sessions`)
+    const mcpSessionUrl = `${MCP_BASE_URL}/v1/${userId}/sessions`
+    console.log('DEBUG: Fetching MCP sessions from:', mcpSessionUrl)
+    
+    const mcpSessionsResp = await fetch(mcpSessionUrl)
     let sessionId = undefined
+    
+    console.log('DEBUG: MCP sessions response:', {
+      ok: mcpSessionsResp.ok,
+      status: mcpSessionsResp.status,
+      statusText: mcpSessionsResp.statusText,
+      headers: Object.fromEntries(mcpSessionsResp.headers.entries())
+    })
+    
     if (mcpSessionsResp.ok) {
       const body = await mcpSessionsResp.json()
+      console.log('DEBUG: MCP sessions body:', body)
       if (body[id]) {
         sessionId = body[id]
       }
+    } else {
+      console.error('DEBUG: MCP sessions fetch failed:', await mcpSessionsResp.text())
     }
 
+    console.log('DEBUG: Final sessionId for MCPSessionManager:', sessionId)
     const mcpSession = new MCPSessionManager(MCP_BASE_URL, userId, id, sessionId)
 
     return createDataStreamResponse({
