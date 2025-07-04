@@ -1,7 +1,7 @@
 import { auth } from "@/app/(auth)/auth"
 import { systemPrompt } from "@/lib/ai/prompts"
 import { myProvider } from "@/lib/ai/providers"
-import { isProductionEnvironment } from "@/lib/constants"
+import { isProductionEnvironment, isAuthDisabled } from "@/lib/constants"
 import {
   deleteChatById,
   getChatById,
@@ -13,6 +13,7 @@ import {
   getMostRecentUserMessage,
   getTrailingMessageId,
 } from "@/lib/utils"
+import { getEffectiveSession, shouldPersistData } from "@/lib/auth-utils"
 import { MCPSessionManager } from "@/mods/mcp-client"
 import {
   UIMessage,
@@ -25,7 +26,8 @@ import { streamText } from "./streamText"
 
 export const maxDuration = 60
 
-const MCP_BASE_URL = process.env.MCP_SERVER ? process.env.MCP_SERVER : "https://mcp.pipedream.net"
+const MCP_BASE_URL = process.env.MCP_SERVER ? process.env.MCP_SERVER : "https://remote.mcp.pipedream.net"
+
 
 export async function POST(request: Request) {
   try {
@@ -39,7 +41,7 @@ export async function POST(request: Request) {
       selectedChatModel: string
     } = await request.json()
 
-    const session = await auth()
+    const session = await getEffectiveSession()
 
     if (!session || !session.user || !session.user.id) {
       return new Response(JSON.stringify({ error: "Authentication required", redirectToAuth: true }), { 
@@ -50,41 +52,46 @@ export async function POST(request: Request) {
       })
     }
 
+    const userId = session.user.id
+
     const userMessage = getMostRecentUserMessage(messages)
 
     if (!userMessage) {
       return new Response("No user message found", { status: 400 })
     }
 
-    const chat = await getChatById({ id })
+    // Only check/save chat and messages if persistence is enabled
+    if (shouldPersistData()) {
+      const chat = await getChatById({ id })
 
-    if (!chat) {
-      const title = await generateTitleFromUserMessage({
-        message: userMessage,
-      })
+      if (!chat) {
+        const title = await generateTitleFromUserMessage({
+          message: userMessage,
+        })
 
-      await saveChat({ id, userId: session.user.id, title })
-    } else {
-      if (chat.userId !== session.user.id) {
-        return new Response("Unauthorized", { status: 401 })
+        await saveChat({ id, userId, title })
+      } else {
+        if (chat.userId !== userId) {
+          return new Response("Unauthorized", { status: 401 })
+        }
       }
+
+      await saveMessages({
+        messages: [
+          {
+            chatId: id,
+            id: userMessage.id,
+            role: "user",
+            parts: userMessage.parts,
+            attachments: userMessage.experimental_attachments ?? [],
+            createdAt: new Date(),
+          },
+        ],
+      })
     }
 
-    await saveMessages({
-      messages: [
-        {
-          chatId: id,
-          id: userMessage.id,
-          role: "user",
-          parts: userMessage.parts,
-          attachments: userMessage.experimental_attachments ?? [],
-          createdAt: new Date(),
-        },
-      ],
-    })
-
     // get any existing mcp sessions from the mcp server
-    const mcpSessionsResp = await fetch(`${MCP_BASE_URL}/v1/${session.user.id}/sessions`)
+    const mcpSessionsResp = await fetch(`${MCP_BASE_URL}/v1/${userId}/sessions`)
     let sessionId = undefined
     if (mcpSessionsResp.ok) {
       const body = await mcpSessionsResp.json()
@@ -93,7 +100,7 @@ export async function POST(request: Request) {
       }
     }
 
-    const mcpSession = new MCPSessionManager(MCP_BASE_URL, session.user.id, id, sessionId)
+    const mcpSession = new MCPSessionManager(MCP_BASE_URL, userId, id, sessionId)
 
     return createDataStreamResponse({
       execute: async (dataStream) => {
@@ -109,7 +116,7 @@ export async function POST(request: Request) {
             experimental_generateMessageId: generateUUID,
             getTools: () => mcpSession.tools({ useCache: false }),
             onFinish: async ({ response }) => {
-              if (session.user?.id) {
+              if (userId && shouldPersistData()) {
                 try {
                   const assistantId = getTrailingMessageId({
                     messages: response.messages.filter(
@@ -171,16 +178,23 @@ export async function DELETE(request: Request) {
     return new Response("Not Found", { status: 404 })
   }
 
-  const session = await auth()
+  const session = await getEffectiveSession()
 
   if (!session || !session.user) {
     return new Response("Unauthorized", { status: 401 })
+  }
+  
+  const userId = session.user.id
+
+  // In dev mode without auth, just return success without deleting
+  if (!shouldPersistData()) {
+    return new Response("Chat deleted", { status: 200 })
   }
 
   try {
     const chat = await getChatById({ id })
 
-    if (chat.userId !== session.user.id) {
+    if (chat.userId !== userId) {
       return new Response("Unauthorized", { status: 401 })
     }
 
