@@ -145,29 +145,25 @@ class MCPSessionManager {
     this.connectionPromise = new Promise(async (resolve, reject) => {
       try {
         let headers = {}
-        try {
-          headers = await pdHeaders(this.userId)
-        } catch (error) {
-          console.warn('Failed to get Pipedream headers, proceeding without them:', error)
-        }
-        // Create MCP client using the SDK
-        const transportOptions: any = {
-          requestInit: {
-            headers: {
-              "x-pd-mcp-chat-id": this.chatId,
-              ...headers,
-            }
-          } as RequestInit,
-        }
+        // COMMENTED OUT: Testing if pdHeaders is causing the issue with undefined sessionId
+        // try {
+        //   headers = await pdHeaders(this.userId)
+        // } catch (error) {
+        //   console.warn('Failed to get Pipedream headers, proceeding without them:', error)
+        // }
         
-        // Only include sessionId if it's defined
-        if (this.sessionId) {
-          transportOptions.sessionId = this.sessionId
-        }
-        
+        // Create MCP client using the SDK - back to main branch approach
         const transport = new StreamableHTTPClientTransport(
           new URL(this.serverUrl),
-          transportOptions
+          {
+            sessionId: this.sessionId,
+            requestInit: {
+              headers: {
+                "x-pd-mcp-chat-id": this.chatId,
+                // COMMENTED OUT: ...headers,
+              }
+            } as RequestInit,
+          }
         );
 
         this.client = new MCPClient(
