@@ -123,8 +123,8 @@ export async function POST(request: Request) {
     if (mcpSessionsResp.ok) {
       const body = await mcpSessionsResp.json()
       console.log('DEBUG: MCP sessions body:', body)
-      if (body[id]) {
-        sessionId = body[id]
+      if (body.mcpSessions && body.mcpSessions[id]) {
+        sessionId = body.mcpSessions[id]
       }
     } else {
       console.error('DEBUG: MCP sessions fetch failed:', await mcpSessionsResp.text())
