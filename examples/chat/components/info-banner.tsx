@@ -21,7 +21,7 @@ export function InfoBanner({ isAuthDisabled: isAuthDisabledMode, className = "" 
   }
 
   return (
-    <div className={`flex items-start gap-2 sm:gap-3 px-2 sm:px-3 py-2 rounded-md border text-xs sm:text-sm font-medium ${
+    <div className={`flex items-start gap-2 sm:gap-3 p-2 sm:px-3 rounded-md border text-xs sm:text-sm font-medium ${
       isAuthDisabledMode 
         ? 'bg-amber-50 border-amber-200 text-amber-800 dark:bg-amber-950/20 dark:border-amber-800 dark:text-amber-200' 
         : 'bg-blue-50 border-blue-200 text-blue-800 dark:bg-blue-950/20 dark:border-blue-800 dark:text-blue-200'
@@ -54,7 +54,7 @@ export function InfoBanner({ isAuthDisabled: isAuthDisabledMode, className = "" 
         variant="ghost"
         size="icon"
         onClick={handleDismiss}
-        className="h-6 w-6 text-muted-foreground hover:text-foreground shrink-0 mt-px"
+        className="size-6 text-muted-foreground hover:text-foreground shrink-0 mt-px"
       >
         <X className="size-3" />
         <span className="sr-only">Dismiss</span>

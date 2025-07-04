@@ -38,7 +38,7 @@ function PureChatHeader({
   }
 
   return (
-    <header className="flex sticky top-0 bg-background py-1.5 items-start px-2 md:px-2 gap-2 relative">
+    <header className="flex sticky top-0 bg-background py-1.5 items-start px-2 md:px-2 gap-2">
       <div className="mt-1">
         <SidebarToggle />
       </div>
