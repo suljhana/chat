@@ -144,7 +144,12 @@ class MCPSessionManager {
 
     this.connectionPromise = new Promise(async (resolve, reject) => {
       try {
-        const headers = await pdHeaders(this.userId)
+        let headers = {}
+        try {
+          headers = await pdHeaders(this.userId)
+        } catch (error) {
+          console.warn('Failed to get Pipedream headers, proceeding without them:', error)
+        }
         // Create MCP client using the SDK
         const transport = new StreamableHTTPClientTransport(
           new URL(this.serverUrl),
