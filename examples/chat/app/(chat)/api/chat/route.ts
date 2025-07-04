@@ -43,7 +43,23 @@ export async function POST(request: Request) {
 
     const session = await getEffectiveSession()
 
+    // Debug logging for production
+    console.log('DEBUG: Session details:', {
+      hasSession: !!session,
+      hasUser: !!session?.user,
+      userId: session?.user?.id,
+      sessionType: session?.constructor?.name || 'unknown',
+      isAuthDisabled: process.env.DISABLE_AUTH === 'true',
+      timestamp: new Date().toISOString()
+    })
+
     if (!session || !session.user || !session.user.id) {
+      console.error('Session validation failed:', {
+        hasSession: !!session,
+        hasUser: !!session?.user,
+        userId: session?.user?.id,
+        fullSession: session
+      })
       return new Response(JSON.stringify({ error: "Authentication required", redirectToAuth: true }), { 
         status: 401,
         headers: {
