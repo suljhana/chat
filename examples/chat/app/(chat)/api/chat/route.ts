@@ -26,7 +26,7 @@ import { streamText } from "./streamText"
 
 export const maxDuration = 60
 
-const MCP_BASE_URL = process.env.MCP_SERVER ? process.env.MCP_SERVER : "https://remote.mcp.pipedream.net"
+const MCP_BASE_URL = process.env.MCP_SERVER ? process.env.MCP_SERVER : "https://mcp.pipedream.net"
 
 
 export async function POST(request: Request) {
