@@ -3,7 +3,7 @@ import { Client as MCPClient } from "@modelcontextprotocol/sdk/client/index.js"
 import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js"
 import { jsonSchema, Schema, tool, ToolSet } from "ai"
 import Exa from "exa-js"
-import { pdHeaders } from "@/lib/pd-backend-client"
+import { pdHeaders } from "../lib/pd-backend-client"
 
 type CallToolResult = any
 
@@ -144,16 +144,7 @@ class MCPSessionManager {
 
     this.connectionPromise = new Promise(async (resolve, reject) => {
       try {
-        let headers = {}
-        // Only include Pipedream headers when we have an existing sessionId
-        // The MCP server handles new sessions (undefined sessionId) differently
-        if (this.sessionId) {
-          try {
-            headers = await pdHeaders(this.userId)
-          } catch (error) {
-            console.warn('Failed to get Pipedream headers, proceeding without them:', error)
-          }
-        }
+        const headers = await pdHeaders(this.userId)
         
         // Create MCP client using the SDK - back to main branch approach
         const transport = new StreamableHTTPClientTransport(
