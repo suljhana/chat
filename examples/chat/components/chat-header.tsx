@@ -6,14 +6,12 @@ import { useEffectiveSession } from '@/hooks/use-effective-session'
 import { ModelSelector } from "@/components/model-selector"
 import { SidebarToggle } from "@/components/sidebar-toggle"
 import { Button } from "@/components/ui/button"
-import { InfoBanner } from "@/components/info-banner"
 import { GitHubButton } from "@/components/github-button"
 import { memo } from "react"
 import { PlusIcon } from "./icons"
 import { useSidebar } from "./ui/sidebar"
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip"
 import { VisibilitySelector, VisibilityType } from "./visibility-selector"
-import { useAuthContext } from "./session-provider"
 
 function PureChatHeader({
   chatId,
@@ -29,7 +27,6 @@ function PureChatHeader({
   const router = useRouter()
   const { open } = useSidebar()
   const { data: session } = useEffectiveSession()
-  const { isAuthDisabled } = useAuthContext()
   const isSignedIn = !!session?.user
 
   // Don't render the header for signed-out users
@@ -43,13 +40,53 @@ function PureChatHeader({
         <SidebarToggle />
       </div>
 
-      <div className="mt-1">
+      {!isReadonly && (
+        <div className="mt-1 md:hidden">
+          <ModelSelector
+            selectedModelId={selectedModelId}
+            className=""
+          />
+        </div>
+      )}
+
+      {!isReadonly && (
+        <div className="mt-1 md:hidden">
+          <VisibilitySelector
+            chatId={chatId}
+            selectedVisibilityType={selectedVisibilityType}
+            className=""
+          />
+        </div>
+      )}
+
+      <div className="flex-1 md:hidden"></div>
+
+      <div className="mt-1 md:hidden ml-auto">
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
               variant="outline"
-              className={`order-2 md:order-1 md:px-2 px-2 md:h-fit ml-auto md:ml-0 ${
-                open ? 'md:hidden' : 'flex'
+              className="px-2"
+              onClick={() => {
+                router.push("/")
+                router.refresh()
+              }}
+            >
+              <PlusIcon size={16} />
+              <span>New Chat</span>
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>New Chat</TooltipContent>
+        </Tooltip>
+      </div>
+
+      <div className="mt-1 hidden md:block">
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              variant="outline"
+              className={`md:px-2 md:h-fit ${
+                open ? 'md:hidden' : 'md:flex'
               }`}
               onClick={() => {
                 router.push("/")
@@ -57,7 +94,7 @@ function PureChatHeader({
               }}
             >
               <PlusIcon size={16} />
-              <span className="md:sr-only">New Chat</span>
+              <span className="sr-only">New Chat</span>
             </Button>
           </TooltipTrigger>
           <TooltipContent>New Chat</TooltipContent>
@@ -65,40 +102,28 @@ function PureChatHeader({
       </div>
 
       {!isReadonly && (
-        <div className="mt-1">
+        <div className="mt-1 hidden md:block">
           <ModelSelector
             selectedModelId={selectedModelId}
-            className="order-1 md:order-2"
+            className=""
           />
         </div>
       )}
 
       {!isReadonly && (
-        <div className="mt-1">
+        <div className="mt-1 hidden md:block">
           <VisibilitySelector
             chatId={chatId}
             selectedVisibilityType={selectedVisibilityType}
-            className="order-1 md:order-3"
+            className=""
           />
         </div>
       )}
 
-      <div className="flex-1"></div>
+      <div className="flex-1 hidden md:block"></div>
 
       <div className="mt-1">
-        <GitHubButton className="hidden md:flex order-5 md:order-5 ml-auto" />
-      </div>
-
-      {/* Absolutely positioned banner to align with main content */}
-      <div className="absolute inset-x-0 top-1.5 h-full flex items-start justify-center pointer-events-none">
-        <div className="w-full max-w-3xl px-4">
-          <div className="flex justify-center">
-            <InfoBanner 
-              isAuthDisabled={isAuthDisabled} 
-              className="hidden lg:flex max-w-xl xl:max-w-3xl pointer-events-auto"
-            />
-          </div>
-        </div>
+        <GitHubButton className="hidden md:flex ml-auto" />
       </div>
     </header>
   )

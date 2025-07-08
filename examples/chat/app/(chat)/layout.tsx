@@ -6,7 +6,7 @@ import { auth } from '../(auth)/auth';
 import Script from 'next/script';
 import { SessionProvider } from '@/components/session-provider';
 import { SignedOutHeader } from '@/components/signed-out-header';
-import { isAuthDisabled } from '@/lib/constants';
+import { isAuthDisabled, isPersistenceDisabled } from '@/lib/constants';
 import { createGuestSession } from '@/lib/utils';
 
 export const experimental_ppr = true;
@@ -31,6 +31,7 @@ export default async function Layout({
       />
       <SessionProvider 
         isAuthDisabled={isAuthDisabled} 
+        isPersistenceDisabled={isPersistenceDisabled}
         guestSession={isAuthDisabled ? session : undefined}
       >
         <SidebarProvider defaultOpen={!isCollapsed}>

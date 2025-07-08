@@ -9,22 +9,22 @@ interface ChatModel {
 export const chatModels: Array<ChatModel> = [
   {
     id: "gpt-4o-mini",
-    name: "OpenAI: GPT-4o Mini",
+    name: "GPT-4o Mini",
     description: "Small model for fast, lightweight tasks",
   },
   {
     id: "gpt-4.1",
-    name: "OpenAI: GPT-4.1",
+    name: "GPT-4.1",
     description: "Flagship model for complex tasks",
   },
   {
     id: "claude-opus-4-0",
-    name: "Anthropic: Claude Opus 4",
+    name: "Claude Opus 4",
     description: "Highest level of intelligence and capability",
   },
   {
     id: "claude-sonnet-4-0",
-    name: "Anthropic: Claude Sonnet 4",
+    name: "Claude Sonnet 4",
     description: "High intelligence and balanced performance",
   },
   // {

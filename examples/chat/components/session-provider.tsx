@@ -5,6 +5,7 @@ import { createContext, useContext } from 'react';
 
 type AuthContextType = {
   isAuthDisabled: boolean;
+  isPersistenceDisabled: boolean;
   guestSession?: {
     user: {
       id: string;
@@ -14,15 +15,17 @@ type AuthContextType = {
   };
 };
 
-const AuthContext = createContext<AuthContextType>({ isAuthDisabled: false });
+const AuthContext = createContext<AuthContextType>({ isAuthDisabled: false, isPersistenceDisabled: false });
 
 export function SessionProvider({ 
   children, 
   isAuthDisabled, 
+  isPersistenceDisabled,
   guestSession 
 }: { 
   children: React.ReactNode;
   isAuthDisabled: boolean;
+  isPersistenceDisabled: boolean;
   guestSession?: {
     user: {
       id: string;
@@ -39,7 +42,7 @@ export function SessionProvider({
   
   
   return (
-    <AuthContext.Provider value={{ isAuthDisabled, guestSession }}>
+    <AuthContext.Provider value={{ isAuthDisabled, isPersistenceDisabled, guestSession }}>
       <NextAuthSessionProvider session={session}>
         {children}
       </NextAuthSessionProvider>

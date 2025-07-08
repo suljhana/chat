@@ -77,23 +77,20 @@ pnpm openai-sdk -u <uuid> "Send a funny joke to the #random channel in Slack"
 The chat app is a full-featured Next.js web application that demonstrates MCP integration in a production-ready environment:
 
 ```bash
-cd examples/chat
-pnpm install
-pnpm dev
+pnpm chat
 ```
 
 The chat app includes:
 
-- **Interactive Web Interface**: Full-featured chat UI with real-time messaging
-- **Multi-model Support**: Works with both Anthropic Claude and OpenAI models
-- **Optional Authentication**: Configurable auth system for development vs production
-- **MCP Tool Integration**: Access to 10,000+ tools across 2,700+ APIs
-- **Responsive Design**: Works on desktop and mobile devices
+- **MCP Integration**: Connect to thousands of APIs through Pipedream's MCP server with built-in auth
+- **Multi-model Support**: Works with any LLM provider
+- **Real-time API Calls**: Execute tool calls across different APIs via chat
+- **Responsive Design**: The chat app is optimized for both desktop and mobile devices
 
-For development, you can disable authentication and persistence by setting:
+For development, you can disable user sign-in and chat storage by setting these env vars:
 
 ```bash
-# In examples/chat/.env
+# In .env
 DISABLE_AUTH=true
 DISABLE_PERSISTENCE=true
 EXTERNAL_USER_ID=your-dev-user-id
