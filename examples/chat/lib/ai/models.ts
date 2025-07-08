@@ -8,6 +8,11 @@ interface ChatModel {
 
 export const chatModels: Array<ChatModel> = [
   {
+    id: "gemini-2.5-flash",
+    name: "Gemini 2.5 Flash",
+    description: "High performance, low cost model",
+  },
+  {
     id: "gpt-4o-mini",
     name: "GPT-4o Mini",
     description: "Small model for fast, lightweight tasks",

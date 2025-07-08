@@ -1,4 +1,5 @@
 import { anthropic } from "@ai-sdk/anthropic"
+import { google } from '@ai-sdk/google';
 import { openai } from "@ai-sdk/openai"
 import { customProvider } from "ai"
 import { isTestEnvironment } from "../constants"
@@ -21,6 +22,7 @@ export const myProvider = isTestEnvironment
     })
   : customProvider({
       languageModels: {
+        "gemini-2.5-flash": google("gemini-2.5-flash"),
         "gpt-4o-mini": openai("gpt-4o-mini"),
         "gpt-4.1": openai("gpt-4.1-2025-04-14"),
         "claude-opus-4-0": anthropic("claude-opus-4-20250514"),

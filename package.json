@@ -15,5 +15,8 @@
     "monorepo"
   ],
   "author": "",
-  "license": "MIT"
-} 
+  "license": "MIT",
+  "dependencies": {
+    "@ai-sdk/google": "^1.2.22"
+  }
+}

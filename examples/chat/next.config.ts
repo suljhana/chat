@@ -10,7 +10,7 @@ if (envFilePath) {
 
 const nextConfig: NextConfig = {
   experimental: {
-    ppr: true,
+    ppr: false,
   },
   images: {
     remotePatterns: [

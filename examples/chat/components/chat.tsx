@@ -93,6 +93,9 @@ export function Chat({
               <li className="text-red-600 dark:text-red-400">
                 <code className="bg-red-100 dark:bg-red-900/30 px-2 py-1 rounded text-sm">ANTHROPIC_API_KEY</code> - For Anthropic Claude models
               </li>
+              <li className="text-red-600 dark:text-red-400">
+                <code className="bg-red-100 dark:bg-red-900/30 px-2 py-1 rounded text-sm">GOOGLE_GENERATIVE_AI_API_KEY</code> - For Google Gemini models
+              </li>
             </ul>
             <p className="text-sm text-red-600 dark:text-red-400">
               Please add at least one API key to your <code className="bg-red-100 dark:bg-red-900/30 px-2 py-1 rounded">.env</code> file and restart the server.
