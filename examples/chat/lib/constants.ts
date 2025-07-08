@@ -14,6 +14,21 @@ export const isAuthDisabled = process.env.DISABLE_AUTH === 'true';
 // This allows testing without setting up Supabase/PostgreSQL database
 export const isPersistenceDisabled = process.env.DISABLE_PERSISTENCE === 'true';
 
+// Session duration for guest sessions (24 hours in milliseconds)
+export const SESSION_DURATION_MS = 24 * 60 * 60 * 1000;
+
+// Banner theme styles for different message types
+export const BANNER_THEMES = {
+  warning: {
+    container: 'bg-amber-50 border-amber-200 text-amber-800 dark:bg-amber-950 dark:border-amber-800 dark:text-amber-200',
+    icon: 'text-amber-600 dark:text-amber-400'
+  },
+  info: {
+    container: 'bg-blue-50 border-blue-200 text-blue-800 dark:bg-blue-950 dark:border-blue-800 dark:text-blue-200',
+    icon: 'text-blue-600 dark:text-blue-400'
+  }
+} as const;
+
 // Base metadata used throughout the application
 export const BASE_SITE_URL = 'https://chat.pipedream.com';
 export const BASE_TITLE = 'Pipedream Chat';

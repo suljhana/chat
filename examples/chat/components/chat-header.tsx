@@ -36,10 +36,12 @@ function PureChatHeader({
 
   return (
     <header className="flex sticky top-0 bg-background py-1.5 items-start px-2 md:px-2 gap-2">
+      {/* Always show sidebar toggle */}
       <div className="mt-1">
         <SidebarToggle />
       </div>
 
+      {/* Mobile layout: Show controls in left-to-right order with new chat button on the right */}
       {!isReadonly && (
         <div className="mt-1 md:hidden">
           <ModelSelector
@@ -59,8 +61,10 @@ function PureChatHeader({
         </div>
       )}
 
+      {/* Spacer to push new chat button to the right on mobile */}
       <div className="flex-1 md:hidden"></div>
 
+      {/* Mobile new chat button - positioned on the right with full text */}
       <div className="mt-1 md:hidden ml-auto">
         <Tooltip>
           <TooltipTrigger asChild>
@@ -80,6 +84,7 @@ function PureChatHeader({
         </Tooltip>
       </div>
 
+      {/* Desktop new chat button - hidden when sidebar is open to avoid overlap */}
       <div className="mt-1 hidden md:block">
         <Tooltip>
           <TooltipTrigger asChild>
@@ -101,6 +106,7 @@ function PureChatHeader({
         </Tooltip>
       </div>
 
+      {/* Desktop layout: Show controls after new chat button */}
       {!isReadonly && (
         <div className="mt-1 hidden md:block">
           <ModelSelector
@@ -120,6 +126,7 @@ function PureChatHeader({
         </div>
       )}
 
+      {/* Spacer to push GitHub button to the right on desktop */}
       <div className="flex-1 hidden md:block"></div>
 
       <div className="mt-1">
