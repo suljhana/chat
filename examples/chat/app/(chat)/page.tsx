@@ -4,9 +4,11 @@ import { Chat } from '@/components/chat';
 import { DEFAULT_CHAT_MODEL } from '@/lib/ai/models';
 import { generateUUID } from '@/lib/utils';
 import { DataStreamHandler } from '@/components/data-stream-handler';
+import { hasValidAPIKeys } from '@/lib/ai/api-keys';
 
 export default async function Page() {
   const id = generateUUID();
+  const hasAPIKeys = hasValidAPIKeys();
 
   const cookieStore = await cookies();
   const modelIdFromCookie = cookieStore.get('chat-model');
@@ -21,6 +23,7 @@ export default async function Page() {
           selectedChatModel={DEFAULT_CHAT_MODEL}
           selectedVisibilityType="private"
           isReadonly={false}
+          hasAPIKeys={hasAPIKeys}
         />
         <DataStreamHandler id={id} />
       </>
@@ -36,6 +39,7 @@ export default async function Page() {
         selectedChatModel={modelIdFromCookie.value}
         selectedVisibilityType="private"
         isReadonly={false}
+        hasAPIKeys={hasAPIKeys}
       />
       <DataStreamHandler id={id} />
     </>

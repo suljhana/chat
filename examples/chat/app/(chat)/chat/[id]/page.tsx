@@ -11,6 +11,7 @@ import { DBMessage } from '@/lib/db/schema';
 import { Attachment, UIMessage } from 'ai';
 import { BASE_METADATA, BASE_TITLE, isAuthDisabled } from '@/lib/constants';
 import { getEffectiveSession, shouldPersistData } from '@/lib/auth-utils';
+import { hasValidAPIKeys } from '@/lib/ai/api-keys';
 
 export async function generateMetadata(
   { params }: { params: { id: string } }
@@ -84,6 +85,7 @@ export async function generateMetadata(
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
   const { id } = params;
+  const hasAPIKeys = hasValidAPIKeys();
 
   // In dev mode without auth, create a fresh chat with no messages
   if (!shouldPersistData()) {
@@ -99,6 +101,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
           selectedChatModel={chatModelFromCookie?.value || DEFAULT_CHAT_MODEL}
           selectedVisibilityType="private"
           isReadonly={false}
+          hasAPIKeys={hasAPIKeys}
         />
         <DataStreamHandler id={id} />
       </>
@@ -160,6 +163,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
           selectedChatModel={DEFAULT_CHAT_MODEL}
           selectedVisibilityType={chat.visibility}
           isReadonly={session?.user?.id !== chat.userId}
+          hasAPIKeys={hasAPIKeys}
         />
         <DataStreamHandler id={id} />
       </>
@@ -174,6 +178,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
         selectedChatModel={chatModelFromCookie.value}
         selectedVisibilityType={chat.visibility}
         isReadonly={session?.user?.id !== chat.userId}
+        hasAPIKeys={hasAPIKeys}
       />
       <DataStreamHandler id={id} />
     </>

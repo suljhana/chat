@@ -23,12 +23,14 @@ export function Chat({
   selectedChatModel,
   selectedVisibilityType,
   isReadonly,
+  hasAPIKeys,
 }: {
   id: string;
   initialMessages: Array<UIMessage>;
   selectedChatModel: string;
   selectedVisibilityType: VisibilityType;
   isReadonly: boolean;
+  hasAPIKeys?: boolean;
 }) {
   const { mutate } = useSWRConfig();
   const { data: session } = useEffectiveSession();
@@ -71,6 +73,38 @@ export function Chat({
 
   const [attachments, setAttachments] = useState<Array<Attachment>>([]);
   const isArtifactVisible = useArtifactSelector((state) => state.isVisible);
+
+  // Show error if no API keys are configured
+  if (hasAPIKeys === false) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-dvh bg-background px-4">
+        <div className="max-w-2xl w-full space-y-6 text-center">
+          <div className="bg-red-50 border border-red-200 rounded-lg p-6 dark:bg-red-900/20 dark:border-red-800">
+            <h2 className="text-xl font-semibold text-red-800 dark:text-red-200 mb-3">
+              Missing AI API Keys
+            </h2>
+            <p className="text-red-700 dark:text-red-300 mb-4">
+              Oops, the chat app requires at least one of these environment variables to be set:
+            </p>
+            <ul className="text-left space-y-2 mb-4">
+              <li className="text-red-600 dark:text-red-400">
+                <code className="bg-red-100 dark:bg-red-900/30 px-2 py-1 rounded text-sm">OPENAI_API_KEY</code> - For OpenAI models
+              </li>
+              <li className="text-red-600 dark:text-red-400">
+                <code className="bg-red-100 dark:bg-red-900/30 px-2 py-1 rounded text-sm">ANTHROPIC_API_KEY</code> - For Anthropic Claude models
+              </li>
+            </ul>
+            <p className="text-sm text-red-600 dark:text-red-400">
+              Please add at least one API key to your <code className="bg-red-100 dark:bg-red-900/30 px-2 py-1 rounded">.env</code> file and restart the server.
+            </p>
+          </div>
+          <div className="text-sm text-muted-foreground">
+            <p>Need help? Check the <Link href="https://github.com/pipedreamhq/mcp" className="underline hover:text-foreground">README</Link> for setup instructions.</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   // Layout adjustment for signed-out users
   if (!isSignedIn) {
