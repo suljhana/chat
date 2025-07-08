@@ -1,15 +1,14 @@
-## Pipedream MCP Chat
+## Pipedream Chat
 
-A reference implementation showcasing how to integrate Pipedream's MCP (Model Context Protocol) server into an AI chat application. This demo provides access to 10,000+ tools across 2,700+ APIs through a conversational interface.
+A reference implementation showcasing how to integrate Pipedream's MCP server into an AI chat app. This demo provides access to 10,000+ tools across 2,700+ APIs through a conversational interface and is based on the [Next.js AI Chatbot](https://chat.vercel.ai/).
 
-Based on the [Next.js AI Chatbot](https://chat.vercel.ai/).
+> Check out this app in production at: [chat.pipedream.com](https://chat.pipedream.com)
 
 ### Key Features
 
-- **MCP Integration**: Connect to thousands of APIs through Pipedream's MCP server with built-in auth
-- **Multi-model Support**: Works with any LLM provider
-- **Real-time API Calls**: Execute tool calls across different APIs via chat
-- **Responsive Design**: The chat app is optimized for both desktop and mobile devices
+- **MCP integrations**: Connect to thousands of APIs through Pipedream's MCP server with built-in auth
+- **Flexible LLM and framework support**: Works with any LLM provider or framework
+- **Tool discovery**: Execute tool calls across different APIs via chat
 
 > Check out [Pipedream's developer docs](https://pipedream.com/docs/connect/mcp/developers) for the most up to date information.
 
