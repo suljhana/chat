@@ -84,7 +84,7 @@ export const pdToolsPrompt = `<tools>
       3. Only use WHAT_ARE_YOU_TRYING_TO_DO after you've gathered any needed real-time
          information that's explicitly mentioned in the first part of the request
     </multi_step_tasks>
-    
+
     <limitations>
       While you can help with just about any task that requires communicating with APIs, 
       you cannot build actual multi-step workflows. For building complex workflows, direct users 
@@ -110,6 +110,15 @@ export const pdToolsPrompt = `<tools>
 
     If authentication is required, you will get a message about it when the tool is called. Don't discuss auth with the user unless a tool call reponse says it is needed.
   </pipedream_tools>
+
+  <pipedream_tools_multi_turn>
+    After successfully completing a task on behalf of the user using one app, the user may want to start a task using another app.
+
+    In that case, you will need to call \`WHAT_ARE_YOU_TRYING_TO_DO\` again to find the right tools.
+    
+    Then follow the instructions as stated above to complete the task.
+  </pipedream_tools_multi_turn>
+
   <web_search>
     You can use the \`web_search\` tool to search the web for information. This is useful when you need to find specific information or answer questions that require up-to-date knowledge.
 
