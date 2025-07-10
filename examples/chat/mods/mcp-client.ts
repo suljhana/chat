@@ -2,7 +2,7 @@ import { z } from "zod"
 import { Client as MCPClient } from "@modelcontextprotocol/sdk/client/index.js"
 import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js"
 import { jsonSchema, Schema, tool, ToolSet } from "ai"
-import Exa from "exa-js"
+import axios from "axios"
 import { pdHeaders } from "../lib/pd-backend-client"
 
 type CallToolResult = any
@@ -102,17 +102,40 @@ export const webSearch = tool({
     query: z.string().min(1).max(100).describe("The search query"),
   }),
   execute: async ({ query }) => {
-    const exa = new Exa(process.env.EXA_API_KEY)
-    const { results } = await exa.searchAndContents(query, {
-      livecrawl: "always",
-      numResults: 3,
-    })
-    return results.map((result) => ({
-      title: result.title,
-      url: result.url,
-      content: result.text.slice(0, 1000), // take just the first 1000 characters — optimize this
-      publishedDate: result.publishedDate,
-    }))
+    const response = await axios.post(
+      "https://api.perplexity.ai/chat/completions",
+      {
+        model: "sonar",
+        messages: [
+          {
+            role: "user",
+            content: query,
+          },
+        ],
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.PERPLEXITY_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    const { choices } = response.data;
+    const searchResults = choices[0].search_results || [];
+
+    if (searchResults.length > 0) {
+      return searchResults.map((result: any) => ({
+        title: result.title,
+        url: result.url,
+        content: result.content.slice(0, 1000),
+        publishedDate: result.date,
+      }));
+    }
+
+    return choices.map((choice: any) => ({
+      content: choice.message.content,
+    }));
   },
 })
 
