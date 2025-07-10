@@ -13,6 +13,11 @@ export const chatModels: Array<ChatModel> = [
     description: "High performance, low cost model",
   },
   {
+    id: "gemini-2.5-pro",
+    name: "Gemini 2.5 Pro",
+    description: "High performance model",
+  },
+  {
     id: "gpt-4o-mini",
     name: "GPT-4o Mini",
     description: "Small model for fast, lightweight tasks",
