@@ -218,6 +218,10 @@ class MCPSessionManager {
     }
     this.connectionPromise = null
     this.toolsCache = null
+
+    if (this.keepalive) {
+      clearInterval(this.keepalive)
+    }
   }
 
   /**
@@ -257,11 +261,11 @@ class MCPSessionManager {
       tools[mcpTool.name] = tool({
         description: mcpTool.description || "",
         parameters: jsonSchema(mcpTool.inputSchema),
-        execute: async (args: any, options: ToolExecutionOptions) => {
+        execute: async (args: unknown, options: ToolExecutionOptions) => {
           return this.executeTool(mcpTool.name, args, {
             timeout: 180_000, // 3 minutes
             ...options,
-          });
+          })
         },
       })
     }
@@ -278,7 +282,7 @@ class MCPSessionManager {
    */
   private async executeTool(
     name: string,
-    args: any,
+    args: unknown,
     options: ToolExecutionOptions
   ): Promise<CallToolResult> {
     if (!this.client) {
