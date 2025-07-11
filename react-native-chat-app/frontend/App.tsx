@@ -1,30 +1,42 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { PaperProvider, MD3LightTheme, MD3DarkTheme } from 'react-native-paper';
-import { useColorScheme } from 'react-native';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import { Provider as PaperProvider } from 'react-native-paper';
 import { StatusBar } from 'expo-status-bar';
-
-import { AuthProvider } from './src/contexts/AuthContext';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { ChatProvider } from './src/contexts/ChatContext';
-import { AppNavigator } from './src/navigation/AppNavigator';
+import { theme } from './src/theme';
+import ChatScreen from './src/screens/ChatScreen';
+import SidebarContent from './src/components/SidebarContent';
+
+const Drawer = createDrawerNavigator();
 
 export default function App() {
-  const colorScheme = useColorScheme();
-  const theme = colorScheme === 'dark' ? MD3DarkTheme : MD3LightTheme;
-
   return (
-    <SafeAreaProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
       <PaperProvider theme={theme}>
-        <AuthProvider>
-          <ChatProvider>
-            <NavigationContainer>
-              <AppNavigator />
-              <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
-            </NavigationContainer>
-          </ChatProvider>
-        </AuthProvider>
+        <ChatProvider>
+          <NavigationContainer>
+            <Drawer.Navigator
+              id="MainDrawer"
+              drawerContent={(props) => <SidebarContent {...props} />}
+              screenOptions={{
+                headerShown: false,
+                drawerType: 'slide',
+                drawerStyle: {
+                  backgroundColor: theme.colors.surface,
+                  width: 280,
+                },
+                swipeEnabled: true,
+                swipeEdgeWidth: 50,
+              }}
+            >
+              <Drawer.Screen name="Chat" component={ChatScreen} />
+            </Drawer.Navigator>
+          </NavigationContainer>
+          <StatusBar style="auto" />
+        </ChatProvider>
       </PaperProvider>
-    </SafeAreaProvider>
+    </GestureHandlerRootView>
   );
 }

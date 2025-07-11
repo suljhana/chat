@@ -1,40 +1,35 @@
-import axios from 'axios';
-
-// Base URL for the backend API
-const API_BASE_URL = __DEV__ 
-  ? 'http://localhost:3001/api'  // Development
-  : 'https://your-production-api.com/api';  // Production
-
-export const apiClient = axios.create({
-  baseURL: API_BASE_URL,
-  timeout: 10000,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
-
-// Request interceptor
-apiClient.interceptors.request.use(
-  (config) => {
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
-
-// Response interceptor
-apiClient.interceptors.response.use(
-  (response) => {
-    return response;
-  },
-  (error) => {
-    if (error.response?.status === 401) {
-      // Handle unauthorized access
-      console.log('Unauthorized access detected');
+// Simple API client for React Native
+export const apiClient = {
+  baseURL: 'http://localhost:3001/api',
+  
+  async post(endpoint: string, data: any) {
+    const response = await fetch(`${this.baseURL}${endpoint}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
-    return Promise.reject(error);
-  }
-);
-
-export default apiClient;
+    
+    return response.json();
+  },
+  
+  async get(endpoint: string) {
+    const response = await fetch(`${this.baseURL}${endpoint}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    return response.json();
+  },
+};
