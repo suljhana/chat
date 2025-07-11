@@ -6,7 +6,6 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { InfoBanner } from '@/components/info-banner';
 import { GitHubButton } from '@/components/github-button';
-import { SignInModal } from './sign-in-modal';
 import { useAuthContext } from './session-provider';
 
 export function SignedOutHeader() {
@@ -37,10 +36,7 @@ export function SignedOutHeader() {
         </Button>
       </div>
 
-      <SignInModal 
-        isOpen={isSignInModalOpen} 
-        onClose={() => setIsSignInModalOpen(false)} 
-      />
+
     </header>
   );
 }

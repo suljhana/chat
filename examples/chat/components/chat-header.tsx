@@ -1,7 +1,6 @@
 "use client"
 
 import { useRouter } from "next/navigation"
-import { useEffectiveSession } from '@/hooks/use-effective-session'
 
 import { ModelSelector } from "@/components/model-selector"
 import { SidebarToggle } from "@/components/sidebar-toggle"
@@ -15,21 +14,16 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip"
 function PureChatHeader({
   chatId,
   selectedModelId,
+  setSelectedModel,
   isReadonly,
 }: {
   chatId: string
   selectedModelId: string
+  setSelectedModel: (modelId: string) => void
   isReadonly: boolean
 }) {
   const router = useRouter()
   const { open } = useSidebar()
-  const { data: session } = useEffectiveSession()
-  const isSignedIn = !!session?.user
-
-  // Don't render the header for signed-out users
-  if (!isSignedIn) {
-    return null
-  }
 
   return (
     <header className="flex sticky top-0 bg-background py-1.5 items-start px-2 md:px-2 gap-2">
@@ -43,6 +37,7 @@ function PureChatHeader({
         <div className="mt-1 md:hidden">
           <ModelSelector
             selectedModelId={selectedModelId}
+            setSelectedModel={setSelectedModel}
             className=""
           />
         </div>
@@ -99,6 +94,7 @@ function PureChatHeader({
         <div className="mt-1 hidden md:block">
           <ModelSelector
             selectedModelId={selectedModelId}
+            setSelectedModel={setSelectedModel}
             className=""
           />
         </div>

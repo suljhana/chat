@@ -16,7 +16,6 @@ import {
 import { toast } from 'sonner';
 import { useLocalStorage, useWindowSize } from 'usehooks-ts';
 import { useEffectiveSession } from '@/hooks/use-effective-session';
-import { SignInModal } from './sign-in-modal';
 
 import { ArrowUpIcon, PaperclipIcon, StopIcon } from './icons';
 import { PreviewAttachment } from './preview-attachment';
@@ -107,7 +106,6 @@ function PureMultimodalInput({
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploadQueue, setUploadQueue] = useState<Array<string>>([]);
-  const [isSignInModalOpen, setIsSignInModalOpen] = useState(false);
   const [appSelectorOpen, setAppSelectorOpen] = useState(false);
 
   const { data: session, status: authStatus } = useEffectiveSession();
@@ -117,16 +115,6 @@ function PureMultimodalInput({
     if (e) {
       e.preventDefault();
       e.stopPropagation();
-    }
-    
-    // Check if user is authenticated
-    if (authStatus === 'unauthenticated') {
-      // Save current input to localStorage so it persists after auth
-      setLocalStorageInput(input);
-      
-      // Open the sign-in modal instead of redirecting immediately
-      setIsSignInModalOpen(true);
-      return;
     }
     
     window.history.replaceState({}, '', `/chat/${chatId}`);
@@ -151,7 +139,6 @@ function PureMultimodalInput({
     chatId,
     authStatus,
     input,
-    setIsSignInModalOpen,
   ]);
 
   const uploadFile = async (file: File) => {
@@ -209,11 +196,6 @@ function PureMultimodalInput({
 
   return (
     <div className="relative w-full flex flex-col gap-4">
-      <SignInModal 
-        isOpen={isSignInModalOpen} 
-        onClose={() => setIsSignInModalOpen(false)} 
-      />
-      
       <AppSelector 
         open={appSelectorOpen} 
         onOpenChange={setAppSelectorOpen}
@@ -339,40 +321,6 @@ export const MultimodalInput = memo(
   },
 );
 
-function PureAttachmentsButton({
-  fileInputRef,
-  status,
-  setSignInModalOpen
-}: {
-  fileInputRef: React.MutableRefObject<HTMLInputElement | null>;
-  status: UseChatHelpers['status'];
-  setSignInModalOpen: (isOpen: boolean) => void;
-}) {
-  const { status: authStatus } = useEffectiveSession();
-  const isUnauthenticated = authStatus === 'unauthenticated';
-  
-  return (
-    <Button
-      data-testid="attachments-button"
-      className="rounded-md rounded-bl-lg p-[7px] h-fit dark:border-zinc-700 hover:dark:bg-zinc-900 hover:bg-zinc-200"
-      onClick={(event) => {
-        event.preventDefault();
-        if (isUnauthenticated) {
-          setSignInModalOpen(true);
-          return;
-        }
-        fileInputRef.current?.click();
-      }}
-      disabled={status !== 'ready' || isUnauthenticated}
-      variant="ghost"
-    >
-      <PaperclipIcon size={14} />
-    </Button>
-  );
-}
-
-const AttachmentsButton = memo(PureAttachmentsButton);
-
 function PureAppsButton({
   status,
   setAppSelectorOpen
@@ -445,8 +393,8 @@ function PureSendButton({
     <Button
       data-testid="send-button"
       className="rounded-full p-1.5 h-fit border dark:border-zinc-600"
-      onClick={(event) => {
-        submitForm(event);
+      onClick={() => {
+        submitForm();
       }}
       disabled={input.length === 0 || uploadQueue.length > 0}
     >

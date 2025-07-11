@@ -1,8 +1,6 @@
 'use client';
 
-import { useSession } from 'next-auth/react';
 import { useAuthContext } from '@/components/session-provider';
-import { SESSION_DURATION_MS } from '@/lib/constants';
 
 /**
  * Hook that provides an "effective" session - either the real NextAuth session 
@@ -15,7 +13,6 @@ import { SESSION_DURATION_MS } from '@/lib/constants';
  * @returns Session data compatible with NextAuth's useSession hook
  */
 export function useEffectiveSession() {
-  const { data: session, status } = useSession();
   const { isAuthDisabled, guestSession } = useAuthContext();
 
   // If auth is disabled, always return the guest session
@@ -23,7 +20,7 @@ export function useEffectiveSession() {
     return {
       data: {
         ...guestSession,
-        expires: new Date(Date.now() + SESSION_DURATION_MS).toISOString()
+        expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()
       },
       status: 'authenticated' as const,
       update: () => Promise.resolve(null)
@@ -31,5 +28,5 @@ export function useEffectiveSession() {
   }
 
   // Otherwise return the real session
-  return { data: session, status, update: () => Promise.resolve(null) };
+  return { data: null, status: 'authenticated', update: () => Promise.resolve(null) };
 }

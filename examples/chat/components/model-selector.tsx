@@ -17,9 +17,11 @@ import { CheckCircleFillIcon, ChevronDownIcon } from './icons';
 
 export function ModelSelector({
   selectedModelId,
+  setSelectedModel,
   className,
 }: {
   selectedModelId: string;
+  setSelectedModel: (modelId: string) => void;
 } & React.ComponentProps<typeof Button>) {
   const [open, setOpen] = useState(false);
   const [optimisticModelId, setOptimisticModelId] =
@@ -58,7 +60,7 @@ export function ModelSelector({
               key={id}
               onSelect={() => {
                 setOpen(false);
-
+                setSelectedModel(id);
                 startTransition(() => {
                   setOptimisticModelId(id);
                   saveChatModelAsCookie(id);
