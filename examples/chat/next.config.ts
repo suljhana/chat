@@ -9,6 +9,16 @@ if (envFilePath) {
 }
 
 const nextConfig: NextConfig = {
+  async rewrites() {
+    const destination = `${process.env.BACKEND_API_URL}/api/:path*`;
+    console.log(`Proxying API requests to: ${destination}`);
+    return [
+      {
+        source: '/api/:path*',
+        destination,
+      },
+    ]
+  },
   experimental: {
     ppr: false,
   },
