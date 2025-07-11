@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { useDebounce } from '@/hooks/use-debounce';
 import { App, GetAppsResponse } from '@pipedream/sdk';
 import { Loader2, Search, X } from 'lucide-react';
+import Image from 'next/image';
 import { useCallback, useEffect, useState } from 'react';
 
 interface AppSelectorProps {
@@ -169,19 +170,23 @@ export function AppSelector({
   const renderAppLogo = (app: App) => {
     if (app.id) {
       return (
-        <img 
+        <Image
           src={`https://pipedream.com/s.v0/${app.id}/logo/48`}
           alt={`${app.name} logo`}
+          width={48}
+          height={48}
           className="max-w-full max-h-full object-contain"
         />
       );
-    } 
-    
+    }
+
     if (app.img_src) {
       return (
-        <img 
-          src={app.img_src} 
+        <Image
+          src={app.img_src}
           alt={`${app.name} logo`}
+          width={48}
+          height={48}
           className="max-w-full max-h-full object-contain"
         />
       );
@@ -216,20 +221,20 @@ export function AppSelector({
         </DialogHeader>
         
         <div className="relative">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+          <Search className="absolute left-2.5 top-2.5 size-4 text-muted-foreground" />
           <Input
             placeholder="Search apps..."
-            className="pl-9 pr-9"
+            className="px-9"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
           {search && (
-            <button 
+            <button
               type="button"
-              className="absolute right-2.5 top-2.5 h-4 w-4 text-muted-foreground"
+              className="absolute right-2.5 top-2.5 size-4 text-muted-foreground"
               onClick={() => setSearch('')}
             >
-              <X className="h-4 w-4" />
+              <X className="size-4" />
             </button>
           )}
         </div>
@@ -237,7 +242,7 @@ export function AppSelector({
         <div className="flex-1 overflow-y-auto mt-2 pr-2 h-[490px] scroll-behavior-auto relative pb-10">
           {loading && apps.length === 0 ? (
             <div className="flex justify-center items-center h-full">
-              <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+              <Loader2 className="size-6 animate-spin text-muted-foreground" />
             </div>
           ) : error ? (
             <div className="flex flex-col justify-center items-center h-full">
@@ -276,7 +281,7 @@ export function AppSelector({
                     onClick={() => handleAppClick(app)}
                   >
                     <div className="flex items-center gap-3 px-4 py-3 bg-gray-50 dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800">
-                      <div className="size-8 rounded-sm overflow-hidden flex-shrink-0 bg-white dark:bg-white flex items-center justify-center p-1">
+                      <div className="size-8 rounded-sm overflow-hidden shrink-0 bg-white dark:bg-white flex items-center justify-center p-1">
                         {renderAppLogo(app)}
                       </div>
                       <div className="font-medium">
@@ -349,7 +354,7 @@ export function AppSelector({
             >
               {loading ? (
                 <span className="flex items-center">
-                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  <Loader2 className="size-4 mr-2 animate-spin" />
                   <span>Loading</span>
                 </span>
               ) : 'Load more'}

@@ -2,9 +2,8 @@ import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 
-import { auth } from '@/app/(auth)/auth';
 import { Chat } from '@/components/chat';
-import { getChatById, getMessagesByChatId } from '@/lib/db/queries';
+import { getChatById, getMessagesByChatId, getChats } from '@/lib/db/queries';
 import { DataStreamHandler } from '@/components/data-stream-handler';
 import { DEFAULT_CHAT_MODEL } from '@/lib/ai/models';
 import { DBMessage } from '@/lib/db/schema';
@@ -12,6 +11,15 @@ import { Attachment, UIMessage } from 'ai';
 import { BASE_METADATA, BASE_TITLE, isAuthDisabled } from '@/lib/constants';
 import { getEffectiveSession, shouldPersistData } from '@/lib/auth-utils';
 import { hasValidAPIKeys } from '@/lib/ai/api-keys';
+
+export const dynamic = 'force-dynamic';
+
+export async function generateStaticParams() {
+  const chats = await getChats();
+  return chats.map((chat: { id: string }) => ({
+    id: chat.id,
+  }));
+}
 
 export async function generateMetadata(
   { params }: { params: { id: string } }
@@ -33,8 +41,8 @@ export async function generateMetadata(
   // Find the first user message to use as description
   const messages = await getMessagesByChatId({ id });
   const firstUserMessage = messages.find(msg => msg.role === 'user');
-  const description = firstUserMessage 
-    ? (firstUserMessage.parts.find(part => part.type === 'text')?.text || BASE_TITLE)
+  const description = firstUserMessage
+    ? ((firstUserMessage.parts as any[]).find(part => part.type === 'text')?.text || BASE_TITLE)
     : BASE_TITLE;
   
   // Trim description if too long
@@ -99,7 +107,6 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
           id={id}
           initialMessages={[]}
           selectedChatModel={chatModelFromCookie?.value || DEFAULT_CHAT_MODEL}
-          selectedVisibilityType="private"
           isReadonly={false}
           hasAPIKeys={hasAPIKeys}
         />
@@ -161,7 +168,6 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
           id={chat.id}
           initialMessages={convertToUIMessages(messagesFromDb)}
           selectedChatModel={DEFAULT_CHAT_MODEL}
-          selectedVisibilityType={chat.visibility}
           isReadonly={session?.user?.id !== chat.userId}
           hasAPIKeys={hasAPIKeys}
         />
@@ -172,14 +178,13 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
 
   return (
     <>
-      <Chat
-        id={chat.id}
-        initialMessages={convertToUIMessages(messagesFromDb)}
-        selectedChatModel={chatModelFromCookie.value}
-        selectedVisibilityType={chat.visibility}
-        isReadonly={session?.user?.id !== chat.userId}
-        hasAPIKeys={hasAPIKeys}
-      />
+        <Chat
+          id={chat.id}
+          initialMessages={convertToUIMessages(messagesFromDb)}
+          selectedChatModel={chatModelFromCookie.value}
+          isReadonly={session?.user?.id !== chat.userId}
+          hasAPIKeys={hasAPIKeys}
+        />
       <DataStreamHandler id={id} />
     </>
   );

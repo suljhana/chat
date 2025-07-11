@@ -3,13 +3,12 @@
 import { useRouter } from "next/navigation"
 
 import { ModelSelector } from "@/components/model-selector"
-import { SidebarToggle } from "@/components/sidebar-toggle"
 import { Button } from "@/components/ui/button"
 import { GitHubButton } from "@/components/github-button"
 import { memo } from "react"
 import { PlusIcon } from "./icons"
-import { useSidebar } from "./ui/sidebar"
-import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip"
+
+import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "./ui/tooltip"
 
 function PureChatHeader({
   chatId,
@@ -23,14 +22,13 @@ function PureChatHeader({
   isReadonly: boolean
 }) {
   const router = useRouter()
-  const { open } = useSidebar()
+  
 
   return (
-    <header className="flex sticky top-0 bg-background py-1.5 items-start px-2 md:px-2 gap-2">
+    <TooltipProvider>
+      <header className="flex sticky top-0 bg-background py-1.5 items-start px-2 md:px-2 gap-2">
       {/* Always show sidebar toggle */}
-      <div className="mt-1">
-        <SidebarToggle />
-      </div>
+
 
       {/* Mobile layout: Show controls in left-to-right order with new chat button on the right */}
       {!isReadonly && (
@@ -71,19 +69,7 @@ function PureChatHeader({
       <div className="mt-1 hidden md:block">
         <Tooltip>
           <TooltipTrigger asChild>
-            <Button
-              variant="outline"
-              className={`md:px-2 md:h-fit ${
-                open ? 'md:hidden' : 'md:flex'
-              }`}
-              onClick={() => {
-                router.push("/")
-                router.refresh()
-              }}
-            >
-              <PlusIcon size={16} />
-              <span className="sr-only">New Chat</span>
-            </Button>
+
           </TooltipTrigger>
           <TooltipContent>New Chat</TooltipContent>
         </Tooltip>
@@ -108,6 +94,7 @@ function PureChatHeader({
         <GitHubButton className="hidden md:flex ml-auto" />
       </div>
     </header>
+    </TooltipProvider>
   )
 }
 

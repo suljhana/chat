@@ -9,6 +9,7 @@ import { createFrontendClient } from "@pipedream/sdk/browser"
 import { prettifyToolName } from "@/lib/utils";
 import { UseChatHelpers } from '@ai-sdk/react';
 import { useEffectiveSession } from '@/hooks/use-effective-session';
+import Image from 'next/image';
 
 type ConnectParams = {
   token: string | undefined;
@@ -123,4 +124,3 @@ export const ToolCallResult = ({
     </Collapsible>
   )
 }
-

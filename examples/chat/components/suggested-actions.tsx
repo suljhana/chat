@@ -7,6 +7,7 @@ import { useEffectiveSession } from '@/hooks/use-effective-session';
 import { UseChatHelpers } from '@ai-sdk/react';
 import { useIsMobile } from '../hooks/use-mobile';
 import { Globe } from 'lucide-react';
+import Image from 'next/image';
 
 interface SuggestedActionsProps {
   chatId: string;
@@ -103,7 +104,7 @@ function PureSuggestedActions({ chatId, append }: SuggestedActionsProps) {
             <div className="flex justify-between items-start w-full">
               <span className="font-medium">{suggestedAction.title}</span>
               {(suggestedAction.appSlugs && suggestedAction.appSlugs.length > 0 || suggestedAction.webSearchIcon) && (
-                <div className="flex items-center gap-1.5 ml-2 flex-shrink-0">
+                <div className="flex items-center gap-1.5 ml-2 shrink-0">
                   {/* Add web search icon */}
                   {suggestedAction.webSearchIcon && (
                     <div 
@@ -118,9 +119,11 @@ function PureSuggestedActions({ chatId, append }: SuggestedActionsProps) {
                       key={`app-icon-${slug}`} 
                       className="size-5 rounded-sm overflow-hidden flex items-center justify-center"
                     >
-                      <img
+                      <Image
                         src={`https://pipedream.com/s.v0/${slug}/logo/48`}
                         alt={slug}
+                        width={48}
+                        height={48}
                         className="size-full object-contain"
                       />
                     </div>

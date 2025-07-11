@@ -32,7 +32,7 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  output: "standalone",
+  output: "export",
   typescript: {
     // !! WARN !!
     // Dangerously allow production builds to successfully complete even if

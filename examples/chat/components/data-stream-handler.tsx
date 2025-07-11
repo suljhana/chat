@@ -2,7 +2,6 @@
 
 import { useChat } from '@ai-sdk/react';
 import { useEffect, useRef } from 'react';
-import { artifactDefinitions, ArtifactKind } from './artifact';
 import { Suggestion } from '@/lib/db/schema';
 import { initialArtifactData, useArtifact } from '@/hooks/use-artifact';
 
@@ -33,18 +32,6 @@ export function DataStreamHandler({ id }: { id: string }) {
     lastProcessedIndex.current = dataStream.length - 1;
 
     (newDeltas as DataStreamDelta[]).forEach((delta: DataStreamDelta) => {
-      const artifactDefinition = artifactDefinitions.find(
-        (artifactDefinition) => artifactDefinition.kind === artifact.kind,
-      );
-
-      if (artifactDefinition?.onStreamPart) {
-        artifactDefinition.onStreamPart({
-          streamPart: delta,
-          setArtifact,
-          setMetadata,
-        });
-      }
-
       setArtifact((draftArtifact) => {
         if (!draftArtifact) {
           return { ...initialArtifactData, status: 'streaming' };
@@ -68,7 +55,7 @@ export function DataStreamHandler({ id }: { id: string }) {
           case 'kind':
             return {
               ...draftArtifact,
-              kind: delta.content as ArtifactKind,
+              kind: delta.content as any,
               status: 'streaming',
             };
 
