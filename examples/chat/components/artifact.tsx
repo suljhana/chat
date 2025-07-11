@@ -21,25 +21,15 @@ import { ArtifactCloseButton } from './artifact-close-button';
 import { ArtifactMessages } from './artifact-messages';
 import { useSidebar } from './ui/sidebar';
 import { useArtifact } from '@/hooks/use-artifact';
-import { imageArtifact } from '@/artifacts/image/client';
-import { codeArtifact } from '@/artifacts/code/client';
-import { sheetArtifact } from '@/artifacts/sheet/client';
-import { textArtifact } from '@/artifacts/text/client';
+
 import equal from 'fast-deep-equal';
 import { UseChatHelpers } from '@ai-sdk/react';
 
-export const artifactDefinitions = [
-  textArtifact,
-  codeArtifact,
-  imageArtifact,
-  sheetArtifact,
-];
-export type ArtifactKind = (typeof artifactDefinitions)[number]['kind'];
+
 
 export interface UIArtifact {
   title: string;
   documentId: string;
-  kind: ArtifactKind;
   content: string;
   isVisible: boolean;
   status: 'streaming' | 'idle';
@@ -139,27 +129,6 @@ function PureArtifact({
             return currentDocuments;
           }
 
-          if (currentDocument.content !== updatedContent) {
-            await fetch(`/api/document?id=${artifact.documentId}`, {
-              method: 'POST',
-              body: JSON.stringify({
-                title: artifact.title,
-                content: updatedContent,
-                kind: artifact.kind,
-              }),
-            });
-
-            setIsContentDirty(false);
-
-            const newDocument = {
-              ...currentDocument,
-              content: updatedContent,
-              createdAt: new Date(),
-            };
-
-            return [...currentDocuments, newDocument];
-          }
-          return currentDocuments;
         },
         { revalidate: false },
       );
@@ -232,24 +201,7 @@ function PureArtifact({
   const { width: windowWidth, height: windowHeight } = useWindowSize();
   const isMobile = windowWidth ? windowWidth < 768 : false;
 
-  const artifactDefinition = artifactDefinitions.find(
-    (definition) => definition.kind === artifact.kind,
-  );
 
-  if (!artifactDefinition) {
-    throw new Error('Artifact definition not found!');
-  }
-
-  useEffect(() => {
-    if (artifact.documentId !== 'init') {
-      if (artifactDefinition.initialize) {
-        artifactDefinition.initialize({
-          documentId: artifact.documentId,
-          setMetadata,
-        });
-      }
-    }
-  }, [artifact.documentId, artifactDefinition, setMetadata]);
 
   return (
     <AnimatePresence>
@@ -310,16 +262,6 @@ function PureArtifact({
               </AnimatePresence>
 
               <div className="flex flex-col h-full justify-between items-center gap-4">
-                <ArtifactMessages
-                  chatId={chatId}
-                  status={status}
-                  votes={votes}
-                  messages={messages}
-                  setMessages={setMessages}
-                  reload={reload}
-                  isReadonly={isReadonly}
-                  artifactStatus={artifact.status}
-                />
 
                 <form className="flex flex-row gap-2 relative items-end w-full px-4 pb-4">
                   <MultimodalInput
@@ -447,39 +389,8 @@ function PureArtifact({
             </div>
 
             <div className="dark:bg-muted bg-background h-full overflow-y-scroll !max-w-full items-center">
-              <artifactDefinition.content
-                title={artifact.title}
-                content={
-                  isCurrentVersion
-                    ? artifact.content
-                    : getDocumentContentById(currentVersionIndex)
-                }
-                mode={mode}
-                status={artifact.status}
-                currentVersionIndex={currentVersionIndex}
-                suggestions={[]}
-                onSaveContent={saveContent}
-                isInline={false}
-                isCurrentVersion={isCurrentVersion}
-                getDocumentContentById={getDocumentContentById}
-                isLoading={isDocumentsFetching && !artifact.content}
-                metadata={metadata}
-                setMetadata={setMetadata}
-              />
 
-              <AnimatePresence>
-                {isCurrentVersion && (
-                  <Toolbar
-                    isToolbarVisible={isToolbarVisible}
-                    setIsToolbarVisible={setIsToolbarVisible}
-                    append={append}
-                    status={status}
-                    stop={stop}
-                    setMessages={setMessages}
-                    artifactKind={artifact.kind}
-                  />
-                )}
-              </AnimatePresence>
+
             </div>
 
             <AnimatePresence>
