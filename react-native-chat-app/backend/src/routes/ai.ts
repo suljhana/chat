@@ -118,7 +118,7 @@ router.post('/chat', optionalAuth, async (req: AuthRequest, res) => {
       if (chatMessages.length <= 2) {
         const firstUserMessage = chatMessages.find(m => m.role === 'user');
         if (firstUserMessage) {
-          const title = firstUserMessage.content.toString().slice(0, 50) + '...';
+          const title = String(firstUserMessage.content).slice(0, 50) + '...';
           await db.update(chat).set({ title }).where(eq(chat.id, chatId));
         }
       }

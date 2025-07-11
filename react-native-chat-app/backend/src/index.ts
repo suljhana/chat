@@ -7,10 +7,10 @@ import { config } from './config/env';
 
 // Import routes
 import authRoutes from './routes/auth';
-import chatRoutes from './routes/chat';
-import messageRoutes from './routes/messages';
-import userRoutes from './routes/user';
-import aiRoutes from './routes/ai';
+// import chatRoutes from './routes/chat';
+// import messageRoutes from './routes/messages';
+// import userRoutes from './routes/user';
+// import aiRoutes from './routes/ai';
 
 const app = express();
 const server = createServer(app);
@@ -39,10 +39,10 @@ app.get('/health', (req, res) => {
 
 // Routes
 app.use('/api/auth', authRoutes);
-app.use('/api/chats', chatRoutes);
-app.use('/api/messages', messageRoutes);
-app.use('/api/user', userRoutes);
-app.use('/api/ai', aiRoutes);
+// app.use('/api/chats', chatRoutes);
+// app.use('/api/messages', messageRoutes);
+// app.use('/api/user', userRoutes);
+// app.use('/api/ai', aiRoutes);
 
 // Socket.IO connection handling
 io.on('connection', (socket) => {
