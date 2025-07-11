@@ -11,17 +11,14 @@ import { memo } from "react"
 import { PlusIcon } from "./icons"
 import { useSidebar } from "./ui/sidebar"
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip"
-import { VisibilitySelector, VisibilityType } from "./visibility-selector"
 
 function PureChatHeader({
   chatId,
   selectedModelId,
-  selectedVisibilityType,
   isReadonly,
 }: {
   chatId: string
   selectedModelId: string
-  selectedVisibilityType: VisibilityType
   isReadonly: boolean
 }) {
   const router = useRouter()
@@ -51,15 +48,6 @@ function PureChatHeader({
         </div>
       )}
 
-      {!isReadonly && (
-        <div className="mt-1 md:hidden">
-          <VisibilitySelector
-            chatId={chatId}
-            selectedVisibilityType={selectedVisibilityType}
-            className=""
-          />
-        </div>
-      )}
 
       {/* Spacer to push new chat button to the right on mobile */}
       <div className="flex-1 md:hidden"></div>
@@ -116,15 +104,6 @@ function PureChatHeader({
         </div>
       )}
 
-      {!isReadonly && (
-        <div className="mt-1 hidden md:block">
-          <VisibilitySelector
-            chatId={chatId}
-            selectedVisibilityType={selectedVisibilityType}
-            className=""
-          />
-        </div>
-      )}
 
       {/* Spacer to push GitHub button to the right on desktop */}
       <div className="flex-1 hidden md:block"></div>

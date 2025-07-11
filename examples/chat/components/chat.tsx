@@ -10,7 +10,6 @@ import { fetcher, generateUUID } from '@/lib/utils';
 import { Artifact } from './artifact';
 import { MultimodalInput } from './multimodal-input';
 import { Messages } from './messages';
-import { VisibilityType } from './visibility-selector';
 import { useArtifactSelector } from '@/hooks/use-artifact';
 import { toast } from 'sonner';
 import { SuggestedActions } from './suggested-actions';
@@ -21,14 +20,12 @@ export function Chat({
   id,
   initialMessages,
   selectedChatModel,
-  selectedVisibilityType,
   isReadonly,
   hasAPIKeys,
 }: {
   id: string;
   initialMessages: Array<UIMessage>;
   selectedChatModel: string;
-  selectedVisibilityType: VisibilityType;
   isReadonly: boolean;
   hasAPIKeys?: boolean;
 }) {
@@ -206,7 +203,6 @@ export function Chat({
         <ChatHeader
           chatId={id}
           selectedModelId={selectedChatModel}
-          selectedVisibilityType={selectedVisibilityType}
           isReadonly={isReadonly}
         />
 
