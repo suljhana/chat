@@ -50,9 +50,6 @@ export function Chat({
     experimental_throttle: 100,
     sendExtraMessageFields: true,
     generateId: generateUUID,
-    onFinish: () => {
-      mutate('/api/history');
-    },
     onError: (error) => {
       // Check if error is a 401 unauthorized due to authentication
       if (error instanceof Error && error.message.includes('401')) {
