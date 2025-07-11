@@ -28,21 +28,42 @@ try {
       select: () => ({ 
         from: (table: any) => ({ 
           where: (condition: any) => {
-            // Simple mock that checks for email in the condition
-            if (table === schema.user) {
-              // If there's a condition, try to extract email for filtering
-              try {
-                const email = condition?.right || condition?.value || condition;
-                if (typeof email === 'string' && email.includes('@')) {
-                  return mockStore.users.filter(user => user.email === email);
-                }
-              } catch (e) {
-                // Fallback
+          if (table === schema.user) {
+            // For user queries, try to filter by email if provided
+            try {
+              const email = condition?.right || condition?.value || condition;
+              if (typeof email === 'string' && email.includes('@')) {
+                return mockStore.users.filter(user => user.email === email);
               }
-              return mockStore.users;
+            } catch (e) {
+              // Fallback
             }
-            return table === schema.chat ? mockStore.chats : table === schema.message ? mockStore.messages : [];
-          },
+            return mockStore.users;
+          }
+          if (table === schema.chat) {
+            // For chat queries, filter by userId if provided
+            try {
+              if (condition && typeof condition === 'string') {
+                return mockStore.chats.filter(chat => chat.userId === condition);
+              }
+            } catch (e) {
+              // Fallback
+            }
+            return mockStore.chats;
+          }
+          if (table === schema.message) {
+            // For message queries, filter by chatId if provided
+            try {
+              if (condition && typeof condition === 'string') {
+                return mockStore.messages.filter(msg => msg.chatId === condition);
+              }
+            } catch (e) {
+              // Fallback
+            }
+            return mockStore.messages;
+          }
+          return [];
+        },
           orderBy: () => {
             if (table === schema.chat) {
               return mockStore.chats.sort((a: any, b: any) => b.createdAt - a.createdAt);
@@ -102,9 +123,8 @@ try {
     select: () => ({ 
       from: (table: any) => ({ 
         where: (condition: any) => {
-          // Simple mock that checks for email in the condition
           if (table === schema.user) {
-            // If there's a condition, try to extract email for filtering
+            // For user queries, try to filter by email if provided
             try {
               const email = condition?.right || condition?.value || condition;
               if (typeof email === 'string' && email.includes('@')) {
@@ -115,7 +135,29 @@ try {
             }
             return mockStore.users;
           }
-          return table === schema.chat ? mockStore.chats : table === schema.message ? mockStore.messages : [];
+          if (table === schema.chat) {
+            // For chat queries, filter by userId if provided
+            try {
+              if (condition && typeof condition === 'string') {
+                return mockStore.chats.filter(chat => chat.userId === condition);
+              }
+            } catch (e) {
+              // Fallback
+            }
+            return mockStore.chats;
+          }
+          if (table === schema.message) {
+            // For message queries, filter by chatId if provided
+            try {
+              if (condition && typeof condition === 'string') {
+                return mockStore.messages.filter(msg => msg.chatId === condition);
+              }
+            } catch (e) {
+              // Fallback
+            }
+            return mockStore.messages;
+          }
+          return [];
         },
         orderBy: () => {
           if (table === schema.chat) {

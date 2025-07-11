@@ -81,7 +81,7 @@ router.post('/chat', optionalAuth, async (req: AuthRequest, res) => {
 
     const result = await streamText({
       model: aiModel,
-      messages,
+      messages: messages as any, // Type conversion for compatibility
       temperature: 0.7,
       maxTokens: 4000,
     });
