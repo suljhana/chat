@@ -4,7 +4,8 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { useDebounce } from '@/hooks/use-debounce';
-import { App, GetAppsResponse } from '@pipedream/sdk';
+import { type App, GetAppsResponse } from '@pipedream/sdk';
+export type { App };
 import { Loader2, Search, X } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 

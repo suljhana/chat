@@ -62,6 +62,7 @@ function PureMultimodalInput({
   useEffect(() => {
     if (textareaRef.current) {
       adjustHeight();
+      textareaRef.current.focus();
     }
   }, []);
 
@@ -283,7 +284,6 @@ function PureMultimodalInput({
           className,
         )}
         rows={2}
-        autoFocus
         onKeyDown={(event) => {
           if (
             event.key === 'Enter' &&
@@ -437,7 +437,7 @@ function PureSendButton({
   input,
   uploadQueue,
 }: {
-  submitForm: () => void;
+  submitForm: (e: React.FormEvent) => void;
   input: string;
   uploadQueue: Array<string>;
 }) {
