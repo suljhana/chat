@@ -21,10 +21,10 @@ export const {
 } = NextAuth({
   ...authConfig,
 
-  adapter: DrizzleAdapter(db, {
-    usersTable: user,
-    accountsTable: accounts,
-  }),
+  // adapter: DrizzleAdapter(db, {
+  //   usersTable: user,
+  //   accountsTable: accounts,
+  // }),
   providers: [
     // Credentials({
     //   credentials: {},
