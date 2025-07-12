@@ -312,10 +312,10 @@ function PureMultimodalInput({
           status={status}
           setAppSelectorOpen={setAppSelectorOpen}
         />
-        <SpeechToText onTranscript={(transcript) => setInput(input + transcript)} />
       </div>
 
-      <div className="absolute bottom-0 right-0 p-2 w-fit flex flex-row justify-end">
+      <div className="absolute bottom-0 right-0 p-2 w-fit flex flex-row justify-end space-x-1">
+        <SpeechToText onTranscript={(transcript) => setInput(input + transcript)} />
         {status === 'submitted' ? (
           <StopButton stop={stop} setMessages={setMessages} />
         ) : (

@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useRef } from 'react';
 import { Button } from './ui/button';
-import { MicIcon, MicOffIcon } from 'lucide-react';
+import { MicIcon } from 'lucide-react';
 import { toast } from 'sonner';
 
 export function SpeechToText({
@@ -98,7 +98,7 @@ export function SpeechToText({
       }}
       variant="ghost"
     >
-      {isListening ? <MicOffIcon size={14} /> : <MicIcon size={14} />}
+      {isListening ? <MicIcon size={14} className="text-red-500" /> : <MicIcon size={14} />}
     </Button>
   );
 }
