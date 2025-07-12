@@ -16,6 +16,7 @@ import { toast } from 'sonner';
 import { SuggestedActions } from './suggested-actions';
 import Link from 'next/link';
 import { useEffectiveSession } from '@/hooks/use-effective-session';
+import { useAuthContext } from '@/components/session-provider';
 
 export function Chat({
   id,
@@ -35,6 +36,7 @@ export function Chat({
   const { mutate } = useSWRConfig();
   const { data: session } = useEffectiveSession();
   const isSignedIn = !!session?.user;
+  const { isAuthDisabled, isPersistenceDisabled } = useAuthContext();
 
   const {
     messages,
