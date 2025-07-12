@@ -17,7 +17,6 @@ import {
 } from '@/components/ui/sidebar';
 import Link from 'next/link';
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
-import Image from 'next/image';
 
 export function AppSidebar({ user }: { user: User | undefined }) {
   const router = useRouter();
@@ -35,14 +34,7 @@ export function AppSidebar({ user }: { user: User | undefined }) {
               }}
               className="flex flex-row gap-3 items-center px-4 cursor-pointer"
             >
-              <Image
-                src="/images/pipedream.svg"
-                alt="Pipedream"
-                width={108}
-                height={24}
-                priority
-                className="dark:invert h-auto w-auto"
-              />
+              <span className="text-xl font-bold">Noodle</span>
             </Link>
             <Tooltip>
               <TooltipTrigger asChild>
