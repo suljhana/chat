@@ -1,6 +1,5 @@
 'use client';
 
-import Image from 'next/image';
 import { signIn } from 'next-auth/react';
 import {
   AlertDialog,
@@ -42,22 +41,15 @@ export function SignInModal({ isOpen, onClose }: SignInModalProps) {
         </Button>
 
         <div className="flex flex-col items-center text-center justify-center flex-1 w-full">
-          {/* Pipedream Logo */}
+          {/* Noodle Logo */}
           <div className="mb-6">
-            <Image
-              src="/images/pipedream.svg"
-              alt="Pipedream"
-              width={180}
-              height={40}
-              priority
-              className="dark:invert"
-            />
+            <span className="text-3xl font-bold">Noodle</span>
           </div>
 
           <AlertDialogHeader className="text-center mb-6 w-full">
             <AlertDialogTitle className="text-xl"></AlertDialogTitle>
             <AlertDialogDescription className="mt-2 text-center text-md text">
-              To use Pipedream Chat, sign up for free or sign in
+              To use Noodle Chat, sign up for free or sign in
             </AlertDialogDescription>
           </AlertDialogHeader>
 
@@ -72,18 +64,6 @@ export function SignInModal({ isOpen, onClose }: SignInModalProps) {
             </svg>
             Sign in with Google
           </Button>
-          
-          <p className="text-sm text-muted-foreground mt-auto text-center px-4">
-            By signing in, you agree to Pipedream&apos;s{" "}
-            <a href="https://pipedream.com/terms" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground">
-              Terms of Service
-            </a>{" "}
-            and{" "}
-            <a href="https://pipedream.com/privacy" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground">
-              Privacy Policy
-            </a>
-            .
-          </p>
         </div>
       </AlertDialogContent>
     </AlertDialog>

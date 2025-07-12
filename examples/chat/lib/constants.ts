@@ -30,9 +30,9 @@ export const BANNER_THEMES = {
 } as const;
 
 // Base metadata used throughout the application
-export const BASE_SITE_URL = 'https://chat.pipedream.com';
-export const BASE_TITLE = 'Pipedream Chat';
-export const BASE_DESCRIPTION = 'Use Pipedream Chat to talk directly with 2700+ APIs and supercharge your productivity';
+export const BASE_SITE_URL = 'https://chat.noodle.run';
+export const BASE_TITLE = 'Noodle Chat';
+export const BASE_DESCRIPTION = 'Use Noodle Chat to talk directly with 2700+ APIs and supercharge your productivity';
 
 export const BASE_METADATA = {
   metadataBase: new URL(BASE_SITE_URL),
@@ -50,7 +50,7 @@ export const BASE_METADATA = {
         url: '/opengraph-image.png',
         width: 1200,
         height: 630,
-        alt: 'Pipedream Chat',
+        alt: 'Noodle Chat',
       }
     ],
   },
@@ -58,13 +58,13 @@ export const BASE_METADATA = {
     card: 'summary_large_image',
     title: BASE_TITLE,
     description: BASE_DESCRIPTION,
-    creator: '@pipedream',
+    creator: '@noodle',
     images: [
       {
         url: '/twitter-image.png',
         width: 1200,
         height: 630,
-        alt: 'Pipedream Chat',
+        alt: 'Noodle Chat',
       }
     ],
   },

@@ -3,11 +3,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 import { ChatBubbleIcon } from './icons';
-import { InfoBanner } from './info-banner';
-import { useAuthContext } from './session-provider';
 
 export const Overview = () => {
-  const { isAuthDisabled, isPersistenceDisabled } = useAuthContext();
   
   return (
     <motion.div
@@ -55,7 +52,6 @@ export const Overview = () => {
              {" "}and 10k+ tools, use Pipedream MCP to supercharge your AI app or agent.
           </p> */}
         </div>
-        <InfoBanner isAuthDisabled={isAuthDisabled} isPersistenceDisabled={isPersistenceDisabled} />
       </div>
     </motion.div>
   );

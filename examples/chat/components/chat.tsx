@@ -139,14 +139,7 @@ export function Chat({
                   <p 
                     className="text-muted-foreground max-w-sm mx-auto"
                   >
-                    Chat directly with 2700+ APIs powered by {" "}
-                    <Link
-                      className="font-medium underline underline-offset-4"
-                      href="https://noodle.run/docs"
-                      target="_blank"
-                    >
-                      Noodle
-                    </Link>
+                    Chat directly with 2700+ APIs
                   </p>
                 </div>
               )}
