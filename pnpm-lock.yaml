@@ -11,6 +11,9 @@ importers:
       '@ai-sdk/google':
         specifier: ^1.2.22
         version: 1.2.22(zod@3.25.76)
+      lucide-react:
+        specifier: ^0.446.0
+        version: 0.446.0(react@19.0.0-rc-45804af1-20241021)
 
   examples/chat:
     dependencies:

@@ -30,6 +30,10 @@ const nextConfig: NextConfig = {
     // !! WARN !!
     ignoreBuildErrors: true,
   },
+  env: {
+    NEXT_PUBLIC_AZURE_SPEECH_KEY: process.env.AZURE_SPEECH_KEY,
+    NEXT_PUBLIC_AZURE_SPEECH_REGION: process.env.AZURE_SPEECH_REGION,
+  }
 }
 
 export default nextConfig

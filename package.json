@@ -17,6 +17,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@ai-sdk/google": "^1.2.22"
+    "@ai-sdk/google": "^1.2.22",
+    "lucide-react": "^0.446.0"
   }
 }

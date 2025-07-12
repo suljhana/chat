@@ -19,6 +19,7 @@ import { useEffectiveSession } from '@/hooks/use-effective-session';
 import { SignInModal } from './sign-in-modal';
 
 import { ArrowUpIcon, PaperclipIcon, StopIcon } from './icons';
+import { SpeechToText } from './speech-to-text';
 import { PreviewAttachment } from './preview-attachment';
 import { Button } from './ui/button';
 import { Textarea } from './ui/textarea';
@@ -311,6 +312,7 @@ function PureMultimodalInput({
           status={status}
           setAppSelectorOpen={setAppSelectorOpen}
         />
+        <SpeechToText onTranscript={(transcript) => setInput(input + transcript)} />
       </div>
 
       <div className="absolute bottom-0 right-0 p-2 w-fit flex flex-row justify-end">
