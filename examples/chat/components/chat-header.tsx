@@ -4,14 +4,14 @@ import { useRouter } from "next/navigation"
 import { useEffectiveSession } from '@/hooks/use-effective-session'
 
 import { ModelSelector } from "@/components/model-selector"
-import { SidebarToggle } from "@/components/sidebar-toggle"
+// import { SidebarToggle } from "@/components/sidebar-toggle"
 import { Button } from "@/components/ui/button"
-import { GitHubButton } from "@/components/github-button"
+// import { GitHubButton } from "@/components/github-button"
 import { memo } from "react"
 import { PlusIcon } from "./icons"
 import { useSidebar } from "./ui/sidebar"
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip"
-import { VisibilitySelector, VisibilityType } from "./visibility-selector"
+// import { VisibilitySelector, VisibilityType } from "./visibility-selector"
 
 function PureChatHeader({
   chatId,
@@ -21,7 +21,7 @@ function PureChatHeader({
 }: {
   chatId: string
   selectedModelId: string
-  selectedVisibilityType: VisibilityType
+  selectedVisibilityType: any
   isReadonly: boolean
 }) {
   const router = useRouter()
@@ -37,9 +37,9 @@ function PureChatHeader({
   return (
     <header className="flex sticky top-0 bg-background py-1.5 items-start px-2 md:px-2 gap-2">
       {/* Always show sidebar toggle */}
-      <div className="mt-1">
+      {/* <div className="mt-1">
         <SidebarToggle />
-      </div>
+      </div> */}
 
       {/* Mobile layout: Show controls in left-to-right order with new chat button on the right */}
       {!isReadonly && (
@@ -53,11 +53,7 @@ function PureChatHeader({
 
       {!isReadonly && (
         <div className="mt-1 md:hidden">
-          <VisibilitySelector
-            chatId={chatId}
-            selectedVisibilityType={selectedVisibilityType}
-            className=""
-          />
+          
         </div>
       )}
 
@@ -118,20 +114,13 @@ function PureChatHeader({
 
       {!isReadonly && (
         <div className="mt-1 hidden md:block">
-          <VisibilitySelector
-            chatId={chatId}
-            selectedVisibilityType={selectedVisibilityType}
-            className=""
-          />
+          
         </div>
       )}
 
       {/* Spacer to push GitHub button to the right on desktop */}
       <div className="flex-1 hidden md:block"></div>
 
-      <div className="mt-1">
-        <GitHubButton className="hidden md:flex ml-auto" />
-      </div>
     </header>
   )
 }

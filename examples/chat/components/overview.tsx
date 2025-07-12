@@ -20,7 +20,7 @@ export const Overview = () => {
     >
       <div className="flex flex-col gap-6 max-w-xl px-4">
         <div className="rounded-xl p-6 flex flex-col gap-8 leading-relaxed text-center">
-          <p className="flex flex-row justify-center gap-4 items-center">
+          {/* <p className="flex flex-row justify-center gap-4 items-center">
             <Image
               src="/images/pipedream-icon.svg"
               alt="Pipedream"
@@ -53,7 +53,7 @@ export const Overview = () => {
               2700+ built-in APIs
             </Link>{" "}
              {" "}and 10k+ tools, use Pipedream MCP to supercharge your AI app or agent.
-          </p>
+          </p> */}
         </div>
         <InfoBanner isAuthDisabled={isAuthDisabled} isPersistenceDisabled={isPersistenceDisabled} />
       </div>
