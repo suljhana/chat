@@ -3,9 +3,10 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 import { ChatBubbleIcon } from './icons';
+import { useAuthContext } from './session-provider';
 
 export const Overview = () => {
-  
+  const { isAuthDisabled, isPersistenceDisabled } = useAuthContext();
   return (
     <motion.div
       key="overview"
